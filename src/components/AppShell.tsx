@@ -110,11 +110,13 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="flex min-h-screen w-full bg-background" ref={frame}>
-        {/* Desktop sidebar */}
+      <div
+        className={cn('flex w-full bg-background', isCanvas ? 'h-svh overflow-hidden' : 'min-h-svh')}
+        ref={frame}>
+        {/* Desktop sidebar. Sticky so a long landing does not scroll the rail away. */}
         <aside
           className={cn(
-            'relative hidden shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:flex',
+            'sticky top-0 z-30 hidden h-svh shrink-0 flex-col self-start border-r border-sidebar-border bg-sidebar lg:flex',
             !dragging && 'transition-[width] duration-150 ease-out'
           )}
           style={{ width: sidebarWidth }}>
@@ -136,7 +138,7 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
 
           <Separator />
 
-          <div className="flex-1 overflow-y-auto overflow-x-hidden py-4">
+          <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden py-4">
             <SidebarNav collapsed={collapsed} counts={counts} />
           </div>
 
@@ -201,7 +203,7 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
         null}
 
         {/* Main column */}
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className={cn('flex min-w-0 flex-1 flex-col', isCanvas ? 'h-full min-h-0' : 'min-h-svh')}>
           <header className="sticky top-0 z-20 flex h-16 shrink-0 items-center gap-2 border-b border-border bg-background/85 px-3 backdrop-blur md:px-8">
             <Button
               variant="ghost"
