@@ -13,7 +13,7 @@ export function OpsQueue() {
   const pending = shipments.filter((s) => s.stage === 'flagged');
   const sent = shipments.filter((s) => s.stage === 'awaiting_shipper');
   return <div className="space-y-6">
-      <PageHeader eyebrow="CX" title="Approvals" actions={<Badge variant={pending.length ? 'destructive' : 'secondary'} className="gap-1">
+      <PageHeader eyebrow="Operations" title="Approvals" actions={<Badge variant={pending.length ? 'destructive' : 'secondary'} className="gap-1">
             <Bell className="h-3 w-3" aria-hidden="true" />
             {pending.length} to review
           </Badge>} />
@@ -60,7 +60,7 @@ export function OpsQueue() {
                     <TableCell className="whitespace-nowrap text-xs text-muted-foreground">{order.pickupAt}</TableCell>
                     <TableCell>
                       <Button size="sm" asChild>
-                        <Link to={`/ops/${order.id}`}>Review</Link>
+                        <Link to={`/approvals/${order.id}`}>Review</Link>
                       </Button>
                     </TableCell>
                   </TableRow>)}
@@ -88,7 +88,7 @@ export function OpsQueue() {
                 <div className="flex items-center gap-3">
                   <StageBadge stage={order.stage} />
                   <Button variant="outline" size="sm" asChild>
-                    <Link to={`/ops/${order.id}`}>Open</Link>
+                    <Link to={`/approvals/${order.id}`}>Open</Link>
                   </Button>
                 </div>
               </div>) : <p className="px-6 py-10 text-center text-sm text-muted-foreground">Nothing outstanding.</p>}

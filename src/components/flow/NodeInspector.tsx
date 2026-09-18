@@ -260,7 +260,7 @@ export function NodeInspector({
           variant="ghost"
           size="sm"
           className="h-7 px-2 text-xs"
-          onClick={() => navigate('/agent')}>
+          onClick={() => navigate('/executions')}>
           
             <ExternalLink className="h-3 w-3" aria-hidden="true" />
             Executions

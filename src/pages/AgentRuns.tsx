@@ -48,7 +48,7 @@ export function AgentRuns() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="AI agent"
+        eyebrow="Operations"
         title="Executions" />
       
 
@@ -96,7 +96,7 @@ export function AgentRuns() {
                         </Badge>
                     }
                       <Button variant="outline" size="sm" asChild>
-                        <Link to={`/agent/${shipment.id}`}>Open run</Link>
+                        <Link to={`/executions/${shipment.id}`}>Open run</Link>
                       </Button>
                     </div>
                   </div>
@@ -125,7 +125,7 @@ export function AgentRuns() {
           {recent.map((shipment) =>
           <Link
             key={shipment.id}
-            to={`/agent/${shipment.id}`}
+            to={`/executions/${shipment.id}`}
             className="flex flex-wrap items-center justify-between gap-3 px-6 py-4 transition-colors hover:bg-accent/50">
             
               <div className="flex min-w-0 items-center gap-3">

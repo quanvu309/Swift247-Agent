@@ -98,7 +98,7 @@ export function Orders() {
                 {rows.map((order) =>
               <TableRow key={order.id}>
                     <TableCell>
-                      <Link to={`/shipper/${order.id}`} className="font-mono text-xs font-medium hover:underline">
+                      <Link to={`/orders/${order.id}`} className="font-mono text-xs font-medium hover:underline">
                         {order.trackingNo}
                       </Link>
                       <p className="text-[11px] text-muted-foreground">
@@ -128,7 +128,7 @@ export function Orders() {
                     </TableCell>
                     <TableCell>
                       <Button variant="ghost" size="icon-sm" asChild>
-                        <Link to={`/shipper/${order.id}`} aria-label={`Open ${order.trackingNo}`}>
+                        <Link to={`/orders/${order.id}`} aria-label={`Open ${order.trackingNo}`}>
                           <ArrowUpRight className="h-3.5 w-3.5" />
                         </Link>
                       </Button>

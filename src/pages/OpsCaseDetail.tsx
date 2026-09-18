@@ -41,7 +41,7 @@ export function OpsCaseDetail() {
         <CardContent className="py-16 text-center">
           <p className="text-sm font-medium">Order not found</p>
           <Button variant="outline" size="sm" className="mt-4" asChild>
-            <Link to="/ops">Back to approvals</Link>
+            <Link to="/approvals">Back to approvals</Link>
           </Button>
         </CardContent>
       </Card>);
@@ -58,7 +58,7 @@ export function OpsCaseDetail() {
   return (
     <div className="space-y-6">
       <PageHeader
-        backTo="/ops"
+        backTo="/approvals"
         backLabel="Approvals"
         eyebrow={order.sender}
         title={order.trackingNo}
@@ -67,7 +67,7 @@ export function OpsCaseDetail() {
         <>
             <StageBadge stage={order.stage} />
             <Button variant="outline" size="sm" asChild>
-              <Link to={`/agent/${order.id}`}>View run</Link>
+              <Link to={`/executions/${order.id}`}>View run</Link>
             </Button>
           </>
         } />

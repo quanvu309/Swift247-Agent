@@ -308,7 +308,7 @@ function FlowCanvas() {
             {activeShipment ?
             <Panel position="top-right">
                 <Link
-                to={`/agent/${activeShipment.id}`}
+                to={`/executions/${activeShipment.id}`}
                 className="flex items-center gap-2 rounded-md border border-border bg-background/95 px-2.5 py-1.5 font-mono text-[11px] shadow-sm backdrop-blur transition-colors hover:border-foreground/40">
                 
                   <span className="font-medium text-foreground">{activeShipment.trackingNo}</span>

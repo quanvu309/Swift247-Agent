@@ -29,13 +29,14 @@ export function App({ autoRunOnSubmit = true, requireOpsApproval = true }: AppPr
           <AppShell>
           <Routes>
             <Route path="/" element={<FlowDesign />} />
-            <Route path="/shipper" element={<Orders />} />
-            <Route path="/shipper/:id" element={<OrderDetail />} />
-            <Route path="/agent" element={<AgentRuns />} />
-            <Route path="/agent/:id" element={<AgentRunDetail />} />
-            <Route path="/ops" element={<OpsQueue />} />
-            <Route path="/ops/:id" element={<OpsCaseDetail />} />
-            <Route path="/smartkargo" element={<SmartKargo />} />
+            <Route path="/design" element={<FlowDesign />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/orders/:id" element={<OrderDetail />} />
+            <Route path="/executions" element={<AgentRuns />} />
+            <Route path="/executions/:id" element={<AgentRunDetail />} />
+            <Route path="/approvals" element={<OpsQueue />} />
+            <Route path="/approvals/:id" element={<OpsCaseDetail />} />
+            <Route path="/connections" element={<SmartKargo />} />
             <Route path="/account" element={<Account />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
