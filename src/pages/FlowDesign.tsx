@@ -1,6 +1,6 @@
 import '@xyflow/react/dist/style.css';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import {
   Background,
@@ -28,7 +28,7 @@ import { Switch } from '../components/ui/CSwitch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../components/ui/Tooltip';
 import { cn } from '../utils/cn';
 import { initialFlowEdges, initialFlowNodes } from '../data/flowGraph';
-import { FlowTemplate, buildTemplate } from '../data/flowTemplates';
+import { FlowTemplate, buildTemplate, flowTemplates } from '../data/flowTemplates';
 import { FlowNodeData, FlowNodeStatus, PaletteNode } from '../types/flow';
 import { Shipment, StepStatus } from '../types/cargo';
 import { useWorkflow } from '../contexts/WorkflowContext';
@@ -82,6 +82,7 @@ function FlowCanvas() {
   const [dirty, setDirty] = useState(false);
   const [showLibrary, setShowLibrary] = useState(true);
   const [showInspector, setShowInspector] = useState(true);
+  const [searchParams] = useSearchParams();
 
   const activeShipment = useMemo(
     () =>
@@ -91,6 +92,18 @@ function FlowCanvas() {
     shipments[0],
     [shipments]
   );
+
+  useEffect(() => {
+    const id = searchParams.get('flow');
+    if (!id) return;
+    const template = flowTemplates.find((item) => item.id === id);
+    if (!template) return;
+    const built = buildTemplate(template);
+    setNodes(built.nodes);
+    setEdges(built.edges);
+    setTemplateId(template.id);
+    setSelectedId(null);
+  }, [searchParams, setEdges, setNodes]);
 
   useEffect(() => {
     setNodes((current) =>

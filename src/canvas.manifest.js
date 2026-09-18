@@ -1,6 +1,7 @@
 export const manifest = {
   screens: {
-    scr_dxxiqf: { name: "Flow Design", route: "/design", position: { "x": 0, "y": 0 }, isDefaultRow: true },
+    scr_flows: { name: "Flows", route: "/", position: { "x": 0, "y": -1800 }, isDefaultRow: true },
+    scr_dxxiqf: { name: "Flow Design", route: "/design", position: { "x": 0, "y": 0 } },
     scr_nl72pr: { name: "Executions", route: "/executions", position: { "x": 160, "y": 3800 } },
     scr_mr1607: { name: "Execution: Flagged run", route: "/executions/shp-1", position: { "x": 1560, "y": 3800 } },
     scr_uyoyk1: { name: "Execution: Cleared", route: "/executions/shp-2", position: { "x": 2960, "y": 3800 } },
@@ -27,6 +28,7 @@ export const manifest = {
     sec_imming: { name: "Account", x: 0, y: 9520, width: 4320, height: 1180 }
   },
   layers: [
+  { kind: "screen", id: "scr_flows" },
   { kind: "screen", id: "scr_dxxiqf" },
   { kind: "section", id: "sec_c0diy3", children: [
     { kind: "screen", id: "scr_agof5y" },

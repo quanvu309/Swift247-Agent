@@ -6,6 +6,7 @@ import { WorkflowProvider } from './contexts/WorkflowContext';
 import { SessionProvider } from './contexts/SessionContext';
 import { Account } from './pages/Account';
 import { FlowDesign } from './pages/FlowDesign';
+import { Flows } from './pages/Flows';
 import { Orders } from './pages/Orders';
 import { OrderDetail } from './pages/OrderDetail';
 import { AgentRuns } from './pages/AgentRuns';
@@ -28,7 +29,7 @@ export function App({ autoRunOnSubmit = true, requireOpsApproval = true }: AppPr
         <BrowserRouter>
           <AppShell>
           <Routes>
-            <Route path="/" element={<FlowDesign />} />
+            <Route path="/" element={<Flows />} />
             <Route path="/design" element={<FlowDesign />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/orders/:id" element={<OrderDetail />} />

@@ -19,7 +19,7 @@ const STORAGE_KEY = 'swift247.sidebar';
 export function AppShell({ children }: {children: React.ReactNode;}) {
   const { shipments } = useWorkflow();
   const location = useLocation();
-  const isCanvas = location.pathname === '/design' || location.pathname === '/';
+  const isCanvas = location.pathname === '/design';
 
   const [width, setWidth] = useState(264);
   const [collapsed, setCollapsed] = useState(false);
