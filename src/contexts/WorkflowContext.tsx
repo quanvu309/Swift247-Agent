@@ -92,7 +92,7 @@ export function WorkflowProvider({
               flag: 'skipped',
               handoff: 'skipped'
             }),
-            timeline: [...s.timeline, event('agent', 'Cleared — no issues')]
+            timeline: [...s.timeline, event('agent', 'Cleared. No issues')]
           };
         }
         return {

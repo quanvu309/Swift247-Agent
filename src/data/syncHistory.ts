@@ -96,7 +96,7 @@ export const syncRuns: SyncRun[] = [
   records: 36,
   duration: '2.8s',
   status: 'partial',
-  detail: '3 entries skipped — unknown category code'
+  detail: '3 entries skipped. Unknown category code'
 },
 {
   id: 'sr-4',
@@ -126,7 +126,7 @@ export const syncRuns: SyncRun[] = [
   records: 0,
   duration: '30.0s',
   status: 'failed',
-  detail: 'Gateway timeout — retried at 07:20'
+  detail: 'Gateway timeout. Retried at 07:20'
 },
 {
   id: 'sr-7',

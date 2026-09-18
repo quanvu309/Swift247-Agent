@@ -44,7 +44,7 @@ export function ConnectionStatus() {
             </TooltipTrigger>
             <TooltipContent>
               {providerLabels[provider]}
-              {connected ? ` — ${live.length} active` : ' — not connected'}
+              {connected ? `. ${live.length} active` : '. Not connected'}
               {failing ? ', 1 needs attention' : ''}
             </TooltipContent>
           </Tooltip>);

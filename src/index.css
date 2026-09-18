@@ -1,6 +1,6 @@
 /* --- MANAGED FONT IMPORTS START (do not edit manually) --- */
 /* INTERNAL USE NAME: Heading */
-@import url('https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 /* INTERNAL USE NAME: Mono */
 @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
@@ -40,7 +40,7 @@
   --accent: #F4EEF6;
   --accent-foreground: #4A1552;
   --destructive: #E23C2C;
-  --destructive-foreground: #E23C2C;
+  --destructive-foreground: #ffffff;
   --border: #EBE3EE;
   --input: #EBE3EE;
   --ring: #8E1F6E;
@@ -75,7 +75,7 @@
   --accent: #2E1834;
   --accent-foreground: #F7F2F8;
   --destructive: #F2603F;
-  --destructive-foreground: #F2603F;
+  --destructive-foreground: #ffffff;
   --border: #33203A;
   --input: #33203A;
   --ring: #B85FA6;
@@ -98,7 +98,7 @@
     @apply border-border outline-ring;
   }
   body {
-    @apply bg-background text-foreground;
-    font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
+    @apply bg-background text-foreground font-sans;
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   }
 }

@@ -54,8 +54,9 @@ export default {content: [
         }
       },
       fontFamily: {
-        heading: ['Geist'],
-        mono: ['"Geist Mono"']
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        heading: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['"Geist Mono"', 'ui-monospace', 'monospace']
       }
     }
   }

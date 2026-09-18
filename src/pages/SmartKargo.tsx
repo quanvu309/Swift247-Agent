@@ -11,7 +11,7 @@ import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/Select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../components/ui/Select';
 import { Separator } from '../components/ui/Separator';
 import { Switch } from '../components/ui/CSwitch';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/Table';
@@ -80,9 +80,11 @@ export function SmartKargo() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectGroup>
                       <SelectItem value="prod">Production</SelectItem>
                       <SelectItem value="uat">UAT</SelectItem>
                       <SelectItem value="sandbox">Sandbox</SelectItem>
+                      </SelectGroup>
                     </SelectContent>
                   </Select>
                 </div>
@@ -93,10 +95,12 @@ export function SmartKargo() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectGroup>
                       <SelectItem value="1">Every 1 min</SelectItem>
                       <SelectItem value="5">Every 5 min</SelectItem>
                       <SelectItem value="15">Every 15 min</SelectItem>
                       <SelectItem value="60">Hourly</SelectItem>
+                      </SelectGroup>
                     </SelectContent>
                   </Select>
                 </div>
