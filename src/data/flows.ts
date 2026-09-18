@@ -46,8 +46,12 @@ function dayLabel(offset: number): string {
 function volumeSeries(seed: number, days: number, scale: number, pass: number): DayVolume[] {
   const rows: DayVolume[] = [];
   for (let i = days - 1; i >= 0; i -= 1) {
+    if (scale <= 0) {
+      rows.push({ day: dayLabel(i), cleared: 0, flagged: 0 });
+      continue;
+    }
     const swing = ((seed * (i + 3)) % 9) / 9;
-    const total = Math.max(4, Math.round(scale * (0.72 + swing * 0.45)));
+    const total = Math.max(1, Math.round(scale * (0.72 + swing * 0.45)));
     const flagged = Math.max(0, Math.round(total * (1 - pass) * (0.7 + ((seed + i) % 5) / 10)));
     rows.push({ day: dayLabel(i), cleared: total - flagged, flagged });
   }

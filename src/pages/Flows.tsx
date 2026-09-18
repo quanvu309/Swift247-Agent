@@ -48,7 +48,7 @@ function CountUp({ value, format, duration = 0.9 }: {value: number;format: (n: n
 }
 
 function sectionMotion(index: number, reduce: boolean) {
-  if (reduce) return {};
+  if (reduce) return { initial: false };
   return {
     initial: { opacity: 0, y: 12 },
     animate: { opacity: 1, y: 0 },

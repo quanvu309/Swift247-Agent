@@ -63,7 +63,7 @@ export function PipelineHero() {
             stroke={tones[node.tone]}
             strokeWidth="2.5"
             animate={reduce ? undefined : { scale: [1, 1.14, 1] }}
-            transition={reduce ? undefined : { duration: 2.2, repeat: Infinity, ease: 'easeInOut' }} />
+            transition={reduce ? undefined : { duration: 2.2, repeat: Infinity, ease: 'easeOut' }} />
             
             <circle r="3.5" fill={tones[node.tone]} />
             <text
