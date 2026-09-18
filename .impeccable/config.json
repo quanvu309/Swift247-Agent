@@ -8,6 +8,12 @@
         "value": "inter",
         "createdAt": "2026-09-18T10:00:07.341Z",
         "reason": "User confirmed Inter is the Swift247 UI face"
+      },
+      {
+        "rule": "overused-font",
+        "value": "geist mono",
+        "createdAt": "2026-09-18T10:11:42.493Z",
+        "reason": "Geist Mono is the committed canvas and measurement face"
       }
     ]
   }
