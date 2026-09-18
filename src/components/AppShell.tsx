@@ -20,6 +20,7 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
   const { shipments } = useWorkflow();
   const location = useLocation();
   const isCanvas = location.pathname === '/design';
+  const isLanding = location.pathname === '/';
 
   const [width, setWidth] = useState(264);
   const [collapsed, setCollapsed] = useState(false);
@@ -276,8 +277,19 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
             <UserMenu />
           </header>
 
-          <main className={cn('min-w-0 flex-1', isCanvas ? 'flex min-h-0 flex-col' : 'px-4 py-7 md:px-8 md:py-9')}>
-            <div className={cn('mx-auto w-full', isCanvas ? 'flex min-h-0 flex-1 flex-col' : 'max-w-[1180px]')}>
+          <main
+            className={cn(
+              'min-w-0 flex-1',
+              isCanvas && 'flex min-h-0 flex-col',
+              isLanding && 'px-0 py-0',
+              !isCanvas && !isLanding && 'px-4 py-7 md:px-8 md:py-9'
+            )}>
+            <div
+              className={cn(
+                'mx-auto w-full',
+                isCanvas && 'flex min-h-0 flex-1 flex-col',
+                !isCanvas && !isLanding && 'max-w-[1180px]'
+              )}>
               {children}
             </div>
           </main>

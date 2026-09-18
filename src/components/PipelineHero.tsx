@@ -1,82 +1,101 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
+import { cn } from '../utils/cn';
 
-const trunk = 'M 36 92 H 392';
-const toMessage = 'M 392 92 C 430 92, 448 44, 496 44';
-const toApproval = 'M 392 92 C 430 92, 448 140, 496 140';
-
-const nodes = [
-  { x: 36, y: 92, label: 'Order created', tone: 'idle' as const },
-  { x: 154, y: 92, label: 'Read documents', tone: 'run' as const },
-  { x: 272, y: 92, label: 'Check rules', tone: 'run' as const },
-  { x: 392, y: 92, label: 'Decision', tone: 'gate' as const },
-  { x: 528, y: 44, label: 'Customer message', tone: 'out' as const },
-  { x: 528, y: 140, label: 'CX approval', tone: 'human' as const }
+const stages = [
+  { n: '01', label: 'Order', sub: 'Created' },
+  { n: '02', label: 'Read', sub: 'Documents' },
+  { n: '03', label: 'Check', sub: 'Rules' },
+  { n: '04', label: 'Decide', sub: 'Clear or flag' }
 ];
 
-const tones = {
-  idle: 'var(--brand-purple)',
-  run: 'var(--brand-orange)',
-  gate: 'var(--brand-magenta)',
-  out: 'var(--chart-2)',
-  human: 'var(--brand-purple)'
-};
-
-function Dot({ d, delay, color }: { d: string; delay: number; color: string }) {
-  return (
-    <motion.circle
-      r="3.5"
-      fill={color}
-      style={{ offsetPath: `path('${d}')`, offsetRotate: '0deg' }}
-      initial={{ offsetDistance: '0%', opacity: 0 }}
-      animate={{ offsetDistance: ['0%', '100%'], opacity: [0, 1, 1, 0] }}
-      transition={{ duration: 2.6, delay, repeat: Infinity, ease: 'linear' }}
-    />
-  );
-}
+const fork = [
+  { n: 'A', label: 'Clear', sub: 'Write SmartKargo' },
+  { n: 'B', label: 'Flag', sub: 'Draft for CX' }
+];
 
 export function PipelineHero() {
   const reduce = usePrefersReducedMotion();
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border bg-[var(--brand-lavender)] px-4 py-6 sm:px-6">
-      <svg viewBox="0 0 620 196" className="h-[196px] w-full" role="img" aria-label="Parcel check pipeline">
-        <path d={trunk} fill="none" stroke="var(--border)" strokeWidth="2" />
-        <path d={toMessage} fill="none" stroke="var(--border)" strokeWidth="2" />
-        <path d={toApproval} fill="none" stroke="var(--border)" strokeWidth="2" />
+    <figure
+      className="relative overflow-hidden rounded-[1.25rem] bg-[var(--brand-purple)] text-white shadow-[0_24px_80px_-28px_rgba(91,26,99,0.65)]"
+      aria-label="Parcel check pipeline from order created to a clear or flag decision">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 left-0 w-5"
+        style={{
+          backgroundImage:
+            'radial-gradient(circle at 0 10px, transparent 6px, rgb(91 26 99) 7px)',
+          backgroundSize: '100% 20px',
+          backgroundRepeat: 'repeat-y'
+        }} />
 
-        {!reduce ?
-        <>
-            <Dot d={trunk} delay={0} color="var(--brand-orange)" />
-            <Dot d={trunk} delay={1.3} color="var(--brand-magenta)" />
-            <Dot d={toMessage} delay={0.4} color="var(--chart-2)" />
-            <Dot d={toApproval} delay={1.1} color="var(--brand-purple)" />
-          </> :
-        null}
+      <div
+        aria-hidden="true"
+        className="sas-grain pointer-events-none absolute inset-0 opacity-40 mix-blend-soft-light" />
 
-        {nodes.map((node) =>
-        <g key={node.label} transform={`translate(${node.x}, ${node.y})`}>
-            <motion.circle
-            r="9"
-            fill="var(--background)"
-            stroke={tones[node.tone]}
-            strokeWidth="2.5"
-            animate={reduce ? undefined : { scale: [1, 1.14, 1] }}
-            transition={reduce ? undefined : { duration: 2.2, repeat: Infinity, ease: 'easeOut' }} />
-            
-            <circle r="3.5" fill={tones[node.tone]} />
-            <text
-            y="28"
-            textAnchor="middle"
-            className="fill-foreground"
-            style={{ fontSize: 10, fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>
-              
-              {node.label}
-            </text>
-          </g>
-        )}
-      </svg>
-    </div>
+      {!reduce ?
+      <motion.span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 w-px bg-[var(--brand-orange)]/80 shadow-[0_0_18px_var(--brand-orange)]"
+        initial={{ left: '8%' }}
+        animate={{ left: ['8%', '92%'] }}
+        transition={{ duration: 5.6, repeat: Infinity, ease: 'linear' }} /> :
+      null}
+
+      <figcaption className="relative flex items-center justify-between gap-3 border-b border-white/10 px-7 py-3 font-mono text-[10px] uppercase tracking-[0.22em] text-white/70">
+        <span>AWB · SAS lane</span>
+        <span className="hidden sm:inline">Before pickup</span>
+        <span>Clear to fly</span>
+      </figcaption>
+
+      <div className="relative px-6 pb-6 pt-7 sm:px-8">
+        <p className="mb-6 max-w-sm text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--brand-orange)]">
+          One parcel. One decision.
+        </p>
+
+        <ol className="relative grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-4">
+          <span
+            aria-hidden="true"
+            className="absolute left-[12%] right-[12%] top-[15px] hidden h-px bg-white/20 sm:block" />
+
+          {!reduce ?
+          <motion.span
+            aria-hidden="true"
+            className="absolute top-[12px] hidden h-1.5 w-1.5 rounded-full bg-[var(--brand-orange)] shadow-[0_0_12px_var(--brand-orange)] sm:block"
+            initial={{ left: '12%' }}
+            animate={{ left: ['12%', '84%'] }}
+            transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }} /> :
+          null}
+
+          {stages.map((stage, index) =>
+          <li key={stage.n} className="relative">
+              <motion.span
+                className={cn(
+                  'mb-3 flex h-[30px] w-[30px] items-center justify-center rounded-full border border-white/25 bg-[var(--brand-purple)] font-mono text-[10px] tracking-wider text-white'
+                )}
+                animate={reduce ? undefined : { scale: index === 3 ? [1, 1.08, 1] : 1 }}
+                transition={reduce ? undefined : { duration: 2.4, repeat: Infinity, ease: 'easeOut' }}>
+                {stage.n}
+              </motion.span>
+              <p className="font-heading text-sm font-semibold tracking-tight">{stage.label}</p>
+              <p className="mt-0.5 text-[11px] text-white/60">{stage.sub}</p>
+            </li>
+          )}
+        </ol>
+
+        <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-white/10">
+          {fork.map((end) =>
+          <div key={end.n} className="bg-[var(--brand-purple)] px-4 py-4 sm:px-5">
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/45">{end.n}</p>
+              <p className="mt-1 text-sm font-semibold tracking-tight">{end.label}</p>
+              <p className="mt-0.5 text-[11px] text-white/60">{end.sub}</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </figure>
   );
 }
