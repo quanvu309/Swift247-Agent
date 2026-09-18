@@ -6,7 +6,6 @@ import { WorkflowProvider } from './contexts/WorkflowContext';
 import { SessionProvider } from './contexts/SessionContext';
 import { Account } from './pages/Account';
 import { FlowDesign } from './pages/FlowDesign';
-import { Flows } from './pages/Flows';
 import { Orders } from './pages/Orders';
 import { OrderDetail } from './pages/OrderDetail';
 import { AgentRuns } from './pages/AgentRuns';
@@ -29,7 +28,7 @@ export function App({ autoRunOnSubmit = true, requireOpsApproval = true }: AppPr
         <BrowserRouter>
           <AppShell>
           <Routes>
-            <Route path="/" element={<Flows />} />
+            <Route path="/" element={<Navigate to="/design" replace />} />
             <Route path="/design" element={<FlowDesign />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/orders/:id" element={<OrderDetail />} />
@@ -39,7 +38,7 @@ export function App({ autoRunOnSubmit = true, requireOpsApproval = true }: AppPr
             <Route path="/approvals/:id" element={<OpsCaseDetail />} />
             <Route path="/connections" element={<SmartKargo />} />
             <Route path="/account" element={<Account />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/design" replace />} />
           </Routes>
           </AppShell>
           <Toaster position="bottom-right" closeButton />

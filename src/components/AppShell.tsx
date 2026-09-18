@@ -20,7 +20,6 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
   const { shipments } = useWorkflow();
   const location = useLocation();
   const isCanvas = location.pathname === '/design';
-  const isLanding = location.pathname === '/';
 
   const [width, setWidth] = useState(264);
   const [collapsed, setCollapsed] = useState(false);
@@ -113,7 +112,7 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
       <div
         className={cn('flex w-full bg-background', isCanvas ? 'h-svh overflow-hidden' : 'min-h-svh')}
         ref={frame}>
-        {/* Desktop sidebar. Sticky so a long landing does not scroll the rail away. */}
+        {/* Desktop sidebar. Sticky so a long page does not scroll the rail away. */}
         <aside
           className={cn(
             'sticky top-0 z-30 hidden h-svh shrink-0 flex-col self-start border-r border-sidebar-border bg-sidebar lg:flex',
@@ -283,14 +282,13 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
             className={cn(
               'min-w-0 flex-1',
               isCanvas && 'flex min-h-0 flex-col',
-              isLanding && 'px-0 py-0',
-              !isCanvas && !isLanding && 'px-4 py-7 md:px-8 md:py-9'
+              !isCanvas && 'px-4 py-7 md:px-8 md:py-9'
             )}>
             <div
               className={cn(
                 'mx-auto w-full',
                 isCanvas && 'flex min-h-0 flex-1 flex-col',
-                !isCanvas && !isLanding && 'max-w-[1180px]'
+                !isCanvas && 'max-w-[1180px]'
               )}>
               {children}
             </div>

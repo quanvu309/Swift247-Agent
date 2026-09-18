@@ -1,4 +1,4 @@
-import { Bot, LayoutDashboard, LucideIcon, Package, PlugZap, ShieldCheck, UserRound, Workflow } from 'lucide-react';
+import { Bot, LucideIcon, Package, PlugZap, ShieldCheck, UserRound, Workflow } from 'lucide-react';
 
 export interface NavItem {
   to: string;
@@ -16,9 +16,7 @@ export interface NavGroup {
 export const navGroups: NavGroup[] = [
 {
   lane: 'Control center',
-  items: [
-  { to: '/', label: 'Flows', icon: LayoutDashboard, end: true },
-  { to: '/design', label: 'Flow Design', icon: Workflow }]
+  items: [{ to: '/design', label: 'Flow Design', icon: Workflow }]
 
 },
 {
