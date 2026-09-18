@@ -1,97 +1,62 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
-import { cn } from '../utils/cn';
-
-const stages = [
-  { n: '01', label: 'Order', sub: 'Created' },
-  { n: '02', label: 'Read', sub: 'Documents' },
-  { n: '03', label: 'Check', sub: 'Rules' },
-  { n: '04', label: 'Decide', sub: 'Clear or flag' }
-];
+import type { ProcessSteps } from '../data/flowsLanding';
+import { Separator } from './ui/Separator';
 
 const fork = [
-  { n: 'A', label: 'Clear', sub: 'Write SmartKargo' },
-  { n: 'B', label: 'Flag', sub: 'Draft for CX' }
-];
+  { label: 'Clear', sub: 'Write SmartKargo' },
+  { label: 'Flag', sub: 'Draft for CX' }
+] as const;
 
-export function PipelineHero() {
+export function PipelineHero({ steps }: { steps: ProcessSteps }) {
   const reduce = usePrefersReducedMotion();
 
   return (
     <figure
-      className="relative overflow-hidden rounded-[1.25rem] bg-[var(--brand-purple)] text-white shadow-[0_24px_80px_-28px_rgba(91,26,99,0.65)]"
+      className="relative w-full overflow-hidden rounded-xl bg-primary text-primary-foreground shadow-sm"
       aria-label="Parcel check pipeline from order created to a clear or flag decision">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-0 w-5"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 0 10px, transparent 6px, rgb(91 26 99) 7px)',
-          backgroundSize: '100% 20px',
-          backgroundRepeat: 'repeat-y'
-        }} />
-
-      <div
-        aria-hidden="true"
-        className="sas-grain pointer-events-none absolute inset-0 opacity-40 mix-blend-soft-light" />
-
       {!reduce ?
       <motion.span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 w-px bg-[var(--brand-orange)]/80 shadow-[0_0_18px_var(--brand-orange)]"
-        initial={{ left: '8%' }}
-        animate={{ left: ['8%', '92%'] }}
+        className="pointer-events-none absolute inset-y-0 left-0 z-[1] w-px bg-primary-foreground/80"
+        initial={{ x: '12%' }}
+        animate={{ x: ['12%', '88%'] }}
         transition={{ duration: 5.6, repeat: Infinity, ease: 'linear' }} /> :
       null}
 
-      <figcaption className="relative flex items-center justify-between gap-3 border-b border-white/10 px-7 py-3 font-mono text-[10px] uppercase tracking-[0.22em] text-white/70">
+      <figcaption className="relative flex items-center justify-between gap-3 border-b border-primary-foreground/15 px-6 py-3 text-[11px] font-medium tracking-[0.14em] text-primary-foreground/80">
         <span>AWB · SAS lane</span>
         <span className="hidden sm:inline">Before pickup</span>
         <span>Clear to fly</span>
       </figcaption>
 
-      <div className="relative px-6 pb-6 pt-7 sm:px-8">
-        <p className="mb-6 max-w-sm text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--brand-orange)]">
-          One parcel. One decision.
-        </p>
-
+      <div className="relative flex flex-col gap-8 px-6 py-7 sm:px-8">
         <ol className="relative grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-4">
           <span
             aria-hidden="true"
-            className="absolute left-[12%] right-[12%] top-[15px] hidden h-px bg-white/20 sm:block" />
+            className="absolute left-[12%] right-[12%] top-4 hidden h-px bg-primary-foreground/20 sm:block" />
 
-          {!reduce ?
-          <motion.span
-            aria-hidden="true"
-            className="absolute top-[12px] hidden h-1.5 w-1.5 rounded-full bg-[var(--brand-orange)] shadow-[0_0_12px_var(--brand-orange)] sm:block"
-            initial={{ left: '12%' }}
-            animate={{ left: ['12%', '84%'] }}
-            transition={{ duration: 3.4, repeat: Infinity, ease: 'easeInOut' }} /> :
-          null}
-
-          {stages.map((stage, index) =>
-          <li key={stage.n} className="relative">
-              <motion.span
-                className={cn(
-                  'mb-3 flex h-[30px] w-[30px] items-center justify-center rounded-full border border-white/25 bg-[var(--brand-purple)] font-mono text-[10px] tracking-wider text-white'
-                )}
-                animate={reduce ? undefined : { scale: index === 3 ? [1, 1.08, 1] : 1 }}
-                transition={reduce ? undefined : { duration: 2.4, repeat: Infinity, ease: 'easeOut' }}>
-                {stage.n}
-              </motion.span>
-              <p className="font-heading text-sm font-semibold tracking-tight">{stage.label}</p>
-              <p className="mt-0.5 text-[11px] text-white/60">{stage.sub}</p>
+          {steps.map((stage) =>
+          <li key={stage.order} className="relative flex flex-col gap-2">
+              <span className="flex size-8 items-center justify-center rounded-full border border-primary-foreground/25 bg-primary text-[10px] font-medium tabular-nums">
+                0{stage.order}
+              </span>
+              <div className="flex flex-col gap-0.5">
+                <p className="font-heading text-sm font-semibold tracking-tight">{stage.shortLabel}</p>
+                <p className="text-[11px] text-primary-foreground/80">{stage.shortDetail}</p>
+              </div>
             </li>
           )}
         </ol>
 
-        <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-white/10">
-          {fork.map((end) =>
-          <div key={end.n} className="bg-[var(--brand-purple)] px-4 py-4 sm:px-5">
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/45">{end.n}</p>
-              <p className="mt-1 text-sm font-semibold tracking-tight">{end.label}</p>
-              <p className="mt-0.5 text-[11px] text-white/60">{end.sub}</p>
+        <div className="grid grid-cols-2 overflow-hidden rounded-lg border border-primary-foreground/15">
+          {fork.map((end, index) =>
+          <div key={end.label} className="relative flex flex-col gap-1 px-4 py-4 sm:px-5">
+              {index === 1 ?
+              <Separator orientation="vertical" className="absolute inset-y-0 left-0 bg-primary-foreground/15" /> :
+              null}
+              <p className="text-sm font-semibold tracking-tight">{end.label}</p>
+              <p className="text-[11px] text-primary-foreground/80">{end.sub}</p>
             </div>
           )}
         </div>
