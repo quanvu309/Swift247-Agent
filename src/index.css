@@ -1,0 +1,104 @@
+/* --- MANAGED FONT IMPORTS START (do not edit manually) --- */
+/* INTERNAL USE NAME: Heading */
+@import url('https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+/* INTERNAL USE NAME: Mono */
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* --- MANAGED FONT IMPORTS END --- */
+
+/* @import url() FONT IMPORTS MUST ALWAYS BE AT THE VERY TOP OF THIS FILE, ABOVE THE TAILWIND IMPORTS — DO NOT DELETE THIS COMMENT */
+
+/* CRITICAL: THE FOLLOWING TAILWIND IMPORTS MUST NEVER BE DELETED OR REORDERED — DO NOT DELETE THIS COMMENT */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* END TAILWIND IMPORTS — ALL OTHER CSS MUST GO BELOW THIS LINE */
+
+@import '@xyflow/react/dist/style.css';
+
+@custom-variant dark (&:is(.dark *));
+:root {
+  /* Swift247 brand */
+  --brand-purple: #5B1A63;
+  --brand-magenta: #8E1F6E;
+  --brand-orange: #F26522;
+  --brand-red: #E23C2C;
+  --brand-lavender: #F6F1F8;
+  --background: #ffffff;
+  --foreground: #241028;
+  --card: #ffffff;
+  --card-foreground: #241028;
+  --popover: #ffffff;
+  --popover-foreground: #241028;
+  --primary: #5B1A63;
+  --primary-foreground: #ffffff;
+  --secondary: #F4EEF6;
+  --secondary-foreground: #4A1552;
+  --muted: #F6F2F7;
+  --muted-foreground: #7A6880;
+  --accent: #F4EEF6;
+  --accent-foreground: #4A1552;
+  --destructive: #E23C2C;
+  --destructive-foreground: #E23C2C;
+  --border: #EBE3EE;
+  --input: #EBE3EE;
+  --ring: #8E1F6E;
+  --chart-1: #F26522;
+  --chart-2: #2E9E6B;
+  --chart-3: #8E1F6E;
+  --chart-4: #5B1A63;
+  --chart-5: #E8952B;
+  --radius: 0.625rem;
+  --sidebar: #F8F3FA;
+  --sidebar-foreground: #241028;
+  --sidebar-primary: #5B1A63;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #F1E9F4;
+  --sidebar-accent-foreground: #4A1552;
+  --sidebar-border: #EBE3EE;
+  --sidebar-ring: #8E1F6E;
+}
+:root.dark {
+  --background: #150A18;
+  --foreground: #F7F2F8;
+  --card: #1D0F21;
+  --card-foreground: #F7F2F8;
+  --popover: #1D0F21;
+  --popover-foreground: #F7F2F8;
+  --primary: #F7F2F8;
+  --primary-foreground: #2A1130;
+  --secondary: #2E1834;
+  --secondary-foreground: #F7F2F8;
+  --muted: #2E1834;
+  --muted-foreground: #B6A3BC;
+  --accent: #2E1834;
+  --accent-foreground: #F7F2F8;
+  --destructive: #F2603F;
+  --destructive-foreground: #F2603F;
+  --border: #33203A;
+  --input: #33203A;
+  --ring: #B85FA6;
+  --chart-1: #F26522;
+  --chart-2: #45C08A;
+  --chart-3: #C05FA8;
+  --chart-4: #9B63C7;
+  --chart-5: #E8952B;
+  --sidebar: #1A0D1E;
+  --sidebar-foreground: #F7F2F8;
+  --sidebar-primary: #F26522;
+  --sidebar-primary-foreground: #1A0D1E;
+  --sidebar-accent: #2E1834;
+  --sidebar-accent-foreground: #F7F2F8;
+  --sidebar-border: #33203A;
+  --sidebar-ring: #B85FA6;
+}
+@layer base {
+  * {
+    @apply border-border outline-ring;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  }
+}
