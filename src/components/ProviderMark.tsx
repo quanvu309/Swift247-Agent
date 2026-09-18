@@ -4,7 +4,7 @@ import { cn } from '../utils/cn';
 
 const marks: Record<AccountProvider, {src: string;alt: string;}> = {
   gmail: {
-    src: '/gmail.svg',
+    src: '/gmail.png',
     alt: 'Gmail'
   },
   outlook: {

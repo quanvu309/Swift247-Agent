@@ -7,7 +7,6 @@ import { ProviderMark } from '../components/ProviderMark';
 import { Avatar, AvatarFallback } from '../components/ui/Avatar';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
 import { Checkbox } from '../components/ui/Checkbox';
 import {
   Dialog,
@@ -20,8 +19,6 @@ import {
 import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../components/ui/Select';
-import { Separator } from '../components/ui/Separator';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/Table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/Tabs';
 import { useSession } from '../contexts/SessionContext';
 import { AccountProvider, ConnectedAccount, providerLabels } from '../types/session';
@@ -147,18 +144,21 @@ export function Account() {
           <TabsTrigger value="team">Team</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="accounts" className="mt-4 space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-sm text-muted-foreground">
-              {connectedCount} of {accounts.length} accounts active
-            </p>
+        <TabsContent value="accounts" className="mt-8 space-y-6">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 className="text-sm font-medium text-foreground">Connected accounts</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {connectedCount} of {accounts.length} active
+              </p>
+            </div>
             <Button size="sm" onClick={openAdd}>
               <Plus className="h-3.5 w-3.5" aria-hidden="true" />
               Add account
             </Button>
           </div>
 
-          <div ref={gridRef} className="grid gap-4 lg:grid-cols-2">
+          <div ref={gridRef} className="divide-y divide-border border-y border-border">
             {accounts.map((account) =>
             <AccountCard
               key={account.id}
@@ -185,115 +185,78 @@ export function Account() {
               }} />
 
             )}
-
             <button
               type="button"
               onClick={openAdd}
-              className="flex min-h-[132px] flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-border text-muted-foreground outline-none transition-colors hover:border-ring/60 hover:bg-accent/40 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring">
-              
+              className="flex w-full items-center gap-3 py-3 text-left text-sm text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring">
               <Plus className="h-4 w-4" aria-hidden="true" />
-              <span className="text-sm font-medium">Add account</span>
-              <span className="text-xs">Gmail, Outlook or SmartKargo</span>
+              Add account
             </button>
           </div>
         </TabsContent>
 
-        <TabsContent value="profile" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Profile</CardTitle>
-              <CardDescription>Shown on approvals and the order activity log</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center gap-3">
-                <Avatar className="h-12 w-12">
-                  <AvatarFallback className="bg-primary text-primary-foreground">{user.initials}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="text-sm font-medium text-foreground">{user.name}</p>
-                  <p className="text-xs text-muted-foreground">{user.email}</p>
-                </div>
-              </div>
-              <Separator />
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Display name</Label>
-                  <Input id="name" defaultValue={user.name} />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Work email</Label>
-                  <Input id="email" defaultValue={user.email} readOnly />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="role">Role</Label>
-                  <Input id="role" defaultValue={user.role} readOnly />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="team">Team</Label>
-                  <Input id="team" defaultValue={user.team} readOnly />
-                </div>
-              </div>
-              <div className="flex justify-end">
-                <Button size="sm" onClick={() => toast.success('Profile saved')}>
-                  Save
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="profile" className="mt-8 max-w-xl space-y-6">
+          <div className="flex items-center gap-3">
+            <Avatar className="h-11 w-11">
+              <AvatarFallback className="bg-primary text-primary-foreground">{user.initials}</AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="text-sm font-medium text-foreground">{user.name}</p>
+              <p className="text-xs text-muted-foreground">{user.email}</p>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Display name</Label>
+              <Input id="name" defaultValue={user.name} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Work email</Label>
+              <Input id="email" defaultValue={user.email} readOnly />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="role">Role</Label>
+              <Input id="role" defaultValue={user.role} readOnly />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="team">Team</Label>
+              <Input id="team" defaultValue={user.team} readOnly />
+            </div>
+            <Button size="sm" onClick={() => toast.success('Profile saved')}>
+              Save
+            </Button>
+          </div>
         </TabsContent>
 
-        <TabsContent value="team" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Operators</CardTitle>
-              <CardDescription>Who can review and send customer messages</CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Team</TableHead>
-                    <TableHead>Last active</TableHead>
-                    <TableHead className="w-28" />
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {team.map((member) =>
-                  <TableRow key={member.id}>
-                      <TableCell>
-                        <div className="flex items-center gap-2.5">
-                          <Avatar className="h-7 w-7">
-                            <AvatarFallback className="text-[10px]">{member.initials}</AvatarFallback>
-                          </Avatar>
-                          <div className="min-w-0">
-                            <p className="truncate text-sm font-medium">{member.name}</p>
-                            <p className="truncate text-xs text-muted-foreground">{member.email}</p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-sm">{member.role}</TableCell>
-                      <TableCell className="text-sm text-muted-foreground">{member.team}</TableCell>
-                      <TableCell className="font-mono text-xs text-muted-foreground">{member.lastActive}</TableCell>
-                      <TableCell>
-                        {member.id === user.id ?
-                      <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <Check className="h-3.5 w-3.5" aria-hidden="true" />
-                            You
-                          </span> :
+        <TabsContent value="team" className="mt-8 space-y-4">
+          <div>
+            <h2 className="text-sm font-medium text-foreground">Team</h2>
+            <p className="mt-1 text-sm text-muted-foreground">Who can review and send customer messages</p>
+          </div>
+          <div className="divide-y divide-border border-y border-border">
+            {team.map((member) =>
+            <div key={member.id} className="flex items-center gap-3 py-3">
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback className="text-[10px]">{member.initials}</AvatarFallback>
+                </Avatar>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">{member.name}</p>
+                  <p className="truncate text-xs text-muted-foreground">{member.email}</p>
+                </div>
+                <p className="hidden text-sm text-muted-foreground sm:block">{member.role}</p>
+                {member.id === user.id ?
+                <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Check className="h-3.5 w-3.5" aria-hidden="true" />
+                    You
+                  </span> :
 
-                      <Button variant="ghost" size="sm" onClick={() => signInAs(member.id)}>
-                            Sign in as
-                          </Button>
-                      }
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+                <Button variant="ghost" size="sm" onClick={() => signInAs(member.id)}>
+                    Sign in as
+                  </Button>
+                }
+              </div>
+            )}
+          </div>
         </TabsContent>
       </Tabs>
 
@@ -301,7 +264,7 @@ export function Account() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <ProviderMark provider={draft.provider} className="h-4 w-auto" />
+              <ProviderMark provider={draft.provider} className="h-6 w-6" />
               {editing ? 'Edit account' : 'Add account'}
             </DialogTitle>
             <DialogDescription>
