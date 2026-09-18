@@ -48,7 +48,7 @@ export function OrderDetail() {
   { label: 'Service', value: `${order.service}, ${order.pickupAt}` },
   { label: 'Parcel', value: `${order.pieces} pc, ${order.weightKg} kg` },
   { label: 'Declared value', value: formatVnd(order.declaredValue) },
-  { label: 'COD', value: order.codAmount ? formatVnd(order.codAmount) : '—' },
+  { label: 'COD', value: order.codAmount ? formatVnd(order.codAmount) : 'None' },
   { label: 'Channel', value: order.channel }];
 
 

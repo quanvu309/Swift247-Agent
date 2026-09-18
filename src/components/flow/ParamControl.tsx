@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, X } from 'lucide-react';
 import { Input } from '../ui/Input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Switch } from '../ui/CSwitch';
 import { FlowNodeParam } from '../../types/flow';
 
@@ -43,11 +43,13 @@ export function ParamControl({ param, onChange }: ParamControlProps) {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
+            <SelectGroup>
             {(param.options ?? [param.value]).map((option) =>
           <SelectItem key={option} value={option} className="text-xs">
                 {option}
               </SelectItem>
           )}
+            </SelectGroup>
           </SelectContent>
         </Select> :
       null}

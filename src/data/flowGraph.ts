@@ -202,7 +202,7 @@ export const initialFlowNodes: Node<FlowNodeData>[] = [
     },
     { label: 'Include deep link', value: 'on', control: 'toggle' }],
 
-    notes: 'Drafts only — nothing is sent from this node.',
+    notes: 'Drafts only. Nothing is sent from this node.',
     status: 'idle',
     enabled: true
   }

@@ -19,7 +19,7 @@ import {
 '../components/ui/Dialog';
 import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/Select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../components/ui/Select';
 import { Separator } from '../components/ui/Separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/Table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/Tabs';
@@ -326,9 +326,11 @@ export function Account() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectGroup>
                     <SelectItem value="gmail">Gmail</SelectItem>
                     <SelectItem value="outlook">Outlook</SelectItem>
                     <SelectItem value="smartkargo">SmartKargo</SelectItem>
+                    </SelectGroup>
                   </SelectContent>
                 </Select>
               </div> :

@@ -24,8 +24,8 @@ export function ConnectionDiagram({ env, latencyMs, uptime, lastSync }: Connecti
         <div className="flex flex-col items-stretch gap-4 p-5 sm:flex-row sm:items-center">
           {/* Left system */}
           <div className="flex min-w-0 flex-1 items-center gap-3">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary text-[11px] font-bold text-primary-foreground">
-              S
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-card p-1">
+              <img src="/swift247-mark.png" alt="" className="h-full w-full object-contain" />
             </span>
             <div className="min-w-0">
               <p className="truncate text-sm font-medium text-foreground">Control Center</p>
@@ -56,7 +56,7 @@ export function ConnectionDiagram({ env, latencyMs, uptime, lastSync }: Connecti
             </div>
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-card p-1.5">
               <img
-                src="/image.png"
+                src="/image-2.png"
                 alt="SmartKargo"
                 className="h-full w-full object-contain" />
               

@@ -200,11 +200,11 @@ export function AgentRunDetail() {
                 }
                   <div>
                     <p className="text-sm font-medium">
-                      {passed ? 'YES — cleared for pickup' : `NO — ${shipment.findings.length} issues`}
+                      {passed ? 'YES. Cleared for pickup' : `NO. ${shipment.findings.length} issues`}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {passed ?
-                    'Status written to SmartKargo — courier can collect.' :
+                    'Status written to SmartKargo. Courier can collect.' :
                     'A customer message was drafted for CX review.'}
                     </p>
                   </div>

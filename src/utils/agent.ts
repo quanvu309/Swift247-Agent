@@ -75,7 +75,7 @@ ${issueLines}
 ${uniqueMissing.length ? `Bạn bổ sung giúp Swift247:\n${missingLines}\n` : ''}
 Bổ sung ngay trong app Swift247 (mục Đơn của tôi → ${shipment.trackingNo}). Đơn giữ chỗ đến ${shipment.pickupAt}; hàng giá trị ${formatVnd(shipment.declaredValue)}.
 
-Cảm ơn bạn — Swift247 CX`
+Cảm ơn bạn. Swift247 CX`
   };
 }
 

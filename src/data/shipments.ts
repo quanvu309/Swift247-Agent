@@ -30,8 +30,8 @@ const o1: Shipment = {
   { id: 'd1', type: 'ITEM_DECLARATION', fileName: 'declaration.json', pages: 1, uploadedAt: '07:12', status: 'extracted' },
   { id: 'd2', type: 'INVOICE', fileName: 'shopee-receipt.jpg', pages: 1, uploadedAt: '07:12', status: 'extracted' },
   { id: 'd3', type: 'PARCEL_PHOTO', fileName: 'parcel-front.jpg', pages: 1, uploadedAt: '07:13', status: 'extracted' },
-  { id: 'd4', type: 'BATTERY_FORM', fileName: '—', pages: 0, uploadedAt: '—', status: 'missing' },
-  { id: 'd5', type: 'ID_CARD', fileName: '—', pages: 0, uploadedAt: '—', status: 'missing' }],
+  { id: 'd4', type: 'BATTERY_FORM', fileName: '', pages: 0, uploadedAt: '', status: 'missing' },
+  { id: 'd5', type: 'ID_CARD', fileName: '', pages: 0, uploadedAt: '', status: 'missing' }],
 
   extracted: [
   { label: 'Sender', value: 'Nguyễn Thanh Tùng', confidence: 0.99, source: 'ITEM_DECLARATION' },
@@ -60,7 +60,7 @@ const o1: Shipment = {
     ruleRef: 'SR-KYC-01',
     title: 'Sender ID required above 5,000,000₫',
     titleVi: 'Cần CCCD cho đơn trên 5.000.000₫',
-    detail: 'Declared value is 8,900,000₫ — a photo of the sender ID is required.',
+    detail: 'Declared value is 8,900,000₫. A photo of the sender ID is required.',
     severity: 'critical',
     source: 'kyc',
     requiredDoc: 'ID_CARD'
@@ -128,7 +128,7 @@ const o2: Shipment = {
   steps: buildSteps({ ocr: 'done', crosscheck: 'done', decision: 'done', flag: 'skipped', handoff: 'skipped' }),
   timeline: [
   { id: 't1', at: '06:04', actor: 'customer', label: 'Order synced from Shopee' },
-  { id: 't2', at: '06:06', actor: 'agent', label: 'Cleared — no issues' },
+  { id: 't2', at: '06:06', actor: 'agent', label: 'Cleared. No issues' },
   { id: 't3', at: '06:40', actor: 'smartkargo', label: 'Picked up by courier' }]
 
 };
@@ -162,7 +162,7 @@ const o3: Shipment = {
   { id: 'd1', type: 'ITEM_DECLARATION', fileName: 'declaration.json', pages: 1, uploadedAt: '08:41', status: 'processing' },
   { id: 'd2', type: 'PARCEL_PHOTO', fileName: 'parcel-open.jpg', pages: 1, uploadedAt: '08:41', status: 'processing' },
   { id: 'd3', type: 'ID_CARD', fileName: 'cccd-front.jpg', pages: 1, uploadedAt: '08:42', status: 'processing' },
-  { id: 'd4', type: 'INVOICE', fileName: '—', pages: 0, uploadedAt: '—', status: 'missing' }],
+  { id: 'd4', type: 'INVOICE', fileName: '', pages: 0, uploadedAt: '', status: 'missing' }],
 
   extracted: [
   { label: 'Sender', value: 'Phạm Thu Hà', confidence: 0.98, source: 'ID_CARD' },
@@ -189,7 +189,7 @@ const o3: Shipment = {
     ruleRef: 'SR-DOC-01',
     title: 'Invoice missing above 2,000,000₫',
     titleVi: 'Thiếu hoá đơn cho đơn trên 2.000.000₫',
-    detail: 'Declared value is 6,400,000₫ — attach the purchase receipt.',
+    detail: 'Declared value is 6,400,000₫. Attach the purchase receipt.',
     severity: 'critical',
     source: 'ocr',
     requiredDoc: 'INVOICE'
@@ -240,8 +240,8 @@ const o4: Shipment = {
   docs: [
   { id: 'd1', type: 'ITEM_DECLARATION', fileName: 'declaration.json', pages: 1, uploadedAt: '21:35', status: 'extracted' },
   { id: 'd2', type: 'ID_CARD', fileName: 'cccd-front.jpg', pages: 1, uploadedAt: '21:35', status: 'extracted' },
-  { id: 'd3', type: 'PARCEL_PHOTO', fileName: '—', pages: 0, uploadedAt: '—', status: 'missing' },
-  { id: 'd4', type: 'PERMIT', fileName: '—', pages: 0, uploadedAt: '—', status: 'missing' }],
+  { id: 'd3', type: 'PARCEL_PHOTO', fileName: '', pages: 0, uploadedAt: '', status: 'missing' },
+  { id: 'd4', type: 'PERMIT', fileName: '', pages: 0, uploadedAt: '', status: 'missing' }],
 
   extracted: [
   { label: 'Sender', value: 'Võ Hoàng Nam', confidence: 0.98, source: 'ID_CARD' },

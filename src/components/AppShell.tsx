@@ -125,14 +125,9 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
               className="flex min-w-0 items-center rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring">
               
               {collapsed ?
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-[11px] font-bold tracking-tight text-primary-foreground">
-                  S
-                </span> :
+              <img src="/swift247-mark.png" alt="" className="h-9 w-9 object-contain" /> :
 
-              <img
-                src="/image.png"
-                alt="Swift247"
-                className="h-9 w-auto" />
+              <img src="/swift247-logo.png" alt="Swift247" className="h-8 w-auto" />
 
               }
             </Link>
@@ -190,10 +185,7 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
           
             <div className="absolute inset-y-0 left-0 flex w-[272px] flex-col border-r border-sidebar-border bg-sidebar shadow-xl">
               <div className="flex h-16 items-center justify-between px-4">
-                <img
-                src="/image.png"
-                alt="Swift247"
-                className="h-9 w-auto" />
+                <img src="/swift247-logo.png" alt="Swift247" className="h-8 w-auto" />
               
                 <Button variant="ghost" size="icon-sm" aria-label="Close navigation" onClick={() => setMobileOpen(false)}>
                   <X className="h-4 w-4" />
