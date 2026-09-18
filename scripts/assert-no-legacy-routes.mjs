@@ -1,4 +1,5 @@
-import { execFileSync } from 'node:child_process';
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 const banned = [
   '"/agent',
@@ -14,19 +15,29 @@ const banned = [
   '`/smartkargo',
   '`/shipper'
 ];
-const src = new URL('../src', import.meta.url).pathname;
 
-let hits = [];
-for (const needle of banned) {
-  let out = '';
-  try {
-    out = execFileSync('rg', ['-n', '--glob', '!**/utils/agent.ts', needle, src], {
-      encoding: 'utf8'
-    });
-  } catch (error) {
-    if (error.status !== 1) throw error;
+const root = new URL('../src', import.meta.url).pathname;
+
+function walk(dir) {
+  const entries = readdirSync(dir, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) files.push(...walk(path));
+    else files.push(path);
   }
-  if (out.trim()) hits.push(out.trim());
+  return files;
+}
+
+const hits = [];
+for (const file of walk(root)) {
+  const text = readFileSync(file, 'utf8');
+  for (const needle of banned) {
+    const index = text.indexOf(needle);
+    if (index === -1) continue;
+    const line = text.slice(0, index).split('\n').length;
+    hits.push(`${file}:${line}:${needle}`);
+  }
 }
 
 if (hits.length) {
