@@ -135,7 +135,7 @@ export function UserMenu() {
               </Link>
             </Button>
             <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-              <Link to="/smartkargo" onClick={() => setOpen(false)}>
+              <Link to="/connections" onClick={() => setOpen(false)}>
                 <Settings className="h-3.5 w-3.5" aria-hidden="true" />
                 Connection & sync
               </Link>

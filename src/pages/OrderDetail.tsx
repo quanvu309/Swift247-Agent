@@ -35,7 +35,7 @@ export function OrderDetail() {
         <CardContent className="py-16 text-center">
           <p className="text-sm font-medium">Order not found</p>
           <Button variant="outline" size="sm" className="mt-4" asChild>
-            <Link to="/shipper">Back to orders</Link>
+            <Link to="/orders">Back to orders</Link>
           </Button>
         </CardContent>
       </Card>);
@@ -57,13 +57,13 @@ export function OrderDetail() {
     setOpen(false);
     setSelected([]);
     toast.success('Re-uploaded', { description: 'Checking again.' });
-    navigate(`/agent/${order.id}`);
+    navigate(`/executions/${order.id}`);
   };
 
   return (
     <div className="space-y-6">
       <PageHeader
-        backTo="/shipper"
+        backTo="/orders"
         backLabel="Orders"
         eyebrow={`${order.sender}, ${order.channel}`}
         title={order.trackingNo}

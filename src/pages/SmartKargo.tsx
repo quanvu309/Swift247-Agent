@@ -46,7 +46,8 @@ export function SmartKargo() {
     <div className="space-y-6">
       <PageHeader
         eyebrow="Integration"
-        title="SmartKargo"
+        title="Connection & sync"
+        description="Credentials, sync, and order status for SmartKargo."
         actions={
         <Badge variant="secondary" className="gap-1.5">
             <PlugZap className="h-3 w-3" aria-hidden="true" />
@@ -435,7 +436,7 @@ export function SmartKargo() {
                       </TableCell>
                       <TableCell>
                         <Button variant="ghost" size="sm" asChild>
-                          <Link to={`/agent/${order.id}`}>Run log</Link>
+                          <Link to={`/executions/${order.id}`}>Run log</Link>
                         </Button>
                       </TableCell>
                     </TableRow>

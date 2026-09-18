@@ -27,7 +27,7 @@ export function AgentRunDetail() {
         <CardContent className="py-16 text-center">
           <p className="text-sm font-medium">Run not found</p>
           <Button variant="outline" size="sm" className="mt-4" asChild>
-            <Link to="/agent">Back to agent runs</Link>
+            <Link to="/executions">Back to executions</Link>
           </Button>
         </CardContent>
       </Card>);
@@ -48,7 +48,7 @@ export function AgentRunDetail() {
   return (
     <div className="space-y-6">
       <PageHeader
-        backTo="/agent"
+        backTo="/executions"
         backLabel="Executions"
         eyebrow={shipment.sender}
         title={shipment.trackingNo}
@@ -218,17 +218,17 @@ export function AgentRunDetail() {
               {shipment.findings.length > 0 && decisionDone ?
               <div className="flex flex-wrap gap-2">
                   <Button size="sm" asChild>
-                    <Link to={`/ops/${shipment.id}`}>Open in CX approvals</Link>
+                    <Link to={`/approvals/${shipment.id}`}>Open in CX approvals</Link>
                   </Button>
                   <Button variant="outline" size="sm" asChild>
-                    <Link to={`/shipper/${shipment.id}`}>View order</Link>
+                    <Link to={`/orders/${shipment.id}`}>View order</Link>
                   </Button>
                 </div> :
               null}
 
               {passed ?
               <Button size="sm" asChild>
-                  <Link to="/smartkargo">Update order status</Link>
+                  <Link to="/connections">Update order status</Link>
                 </Button> :
               null}
             </CardContent>

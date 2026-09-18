@@ -19,7 +19,7 @@ const STORAGE_KEY = 'swift247.sidebar';
 export function AppShell({ children }: {children: React.ReactNode;}) {
   const { shipments } = useWorkflow();
   const location = useLocation();
-  const isCanvas = location.pathname === '/';
+  const isCanvas = location.pathname === '/design' || location.pathname === '/';
 
   const [width, setWidth] = useState(264);
   const [collapsed, setCollapsed] = useState(false);
@@ -251,7 +251,7 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="ghost" size="icon-sm" className="relative" aria-label={`${opsCount} approvals waiting`} asChild>
-                  <Link to="/ops">
+                  <Link to="/approvals">
                     <Bell className="h-4 w-4" />
                     {opsCount > 0 ?
                     <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-destructive" aria-hidden="true" /> :
@@ -265,7 +265,7 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="ghost" size="icon-sm" className="hidden md:inline-flex" aria-label="Connection and sync" asChild>
-                  <Link to="/smartkargo">
+                  <Link to="/connections">
                     <PlugZap className="h-4 w-4" />
                   </Link>
                 </Button>
