@@ -8,13 +8,13 @@ web
 
 ## Users
 
-Ops, CX, and product stakeholders at Swift247. They open the Agent System to understand what SAS does, then jump into a flow canvas. Inferred from the live app and the landing brief. Not a customer interview.
+Ops, CX, and product stakeholders at Swift247. They open Flow Design to see how SAS gates a parcel, then move into executions and approvals. Inferred from the live app. Not a customer interview.
 
 ## Product Purpose
 
 SAS is the Swift247 Agent System. One agent flow reads shipment documents, applies SmartKargo cargo rules, and either clears the order or drafts a customer message before pickup. Success is an honest gate. A truck does not leave on an unchecked file.
 
-`/` is a concept landing. It explains that job and the value. It is not a run-volume dashboard.
+The product opens on Flow Design. There is no Flows landing or run-volume homepage.
 
 ## Positioning
 
@@ -24,7 +24,7 @@ The product sits between the shipper and SmartKargo. CX sees exceptions only. Ne
 
 Vite SPA at https://sw247a.vercel.app. Sticky desktop sidebar. Routes:
 
-- `/` Flows landing
+- `/` redirects to `/design`
 - `/design?flow=<id>` canvas (default `full`)
 - `/executions`, `/approvals`, `/connections`, `/orders`, `/account`
 
@@ -32,9 +32,9 @@ Demo data lives in `src/data`. There is no live analytics backend.
 
 ## Capabilities and Constraints
 
-- CTAs on `/` open `/design?flow=<id>`. Default is `full`.
-- Routes stay as they are.
-- No run-volume chart or KPI dashboard on `/`.
+- `/` sends visitors to `/design`. Keep `?flow=<id>` on the canvas. Default template is `full`.
+- Sidebar has no Flows item. Remaining URLs still match their labels.
+- No Flows landing, no second homepage, and no run-volume or KPI Flows page.
 - Sticky desktop sidebar stays.
 - Official Swift247 marks (`public/swift247-logo.png`, `public/swift247-mark.png`) and Inter stay.
 - Copy has no em dash (U+2014).
@@ -57,7 +57,7 @@ Demo data lives in `src/data`. There is no live analytics backend.
 
 ## Product Principles
 
-- Explain the gate, then open the canvas.
+- Open on the canvas. Keep the gate honest.
 - Prefer one primary action per region.
 - Brand lives in marks, Inter, and the existing tokens. Not in a second palette.
 - Demo numbers are not the story.
