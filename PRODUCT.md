@@ -26,6 +26,7 @@ Vite SPA at https://sw247a.vercel.app. Sticky desktop sidebar. Routes:
 
 - `/` redirects to `/design`
 - `/design?flow=<id>` canvas (default `full`)
+- `/showcase`
 - `/executions`, `/approvals`, `/connections`, `/orders`, `/account`
 
 Demo data lives in `src/data`. There is no live analytics backend.

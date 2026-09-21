@@ -6,6 +6,7 @@ import { WorkflowProvider } from './contexts/WorkflowContext';
 import { SessionProvider } from './contexts/SessionContext';
 import { Account } from './pages/Account';
 import { FlowDesign } from './pages/FlowDesign';
+import { Showcase } from './pages/Showcase';
 import { Orders } from './pages/Orders';
 import { OrderDetail } from './pages/OrderDetail';
 import { AgentRuns } from './pages/AgentRuns';
@@ -17,6 +18,7 @@ import { CATCH_ALL_REDIRECT, ROOT_REDIRECT, appPageRoutes } from './product/appR
 
 const pages: Record<string, React.ComponentType> = {
   FlowDesign,
+  Showcase,
   Orders,
   OrderDetail,
   AgentRuns,
