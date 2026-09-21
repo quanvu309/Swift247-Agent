@@ -10,7 +10,8 @@
     "dev": "npx vite",
     "build": "node scripts/assert-no-legacy-routes.mjs && npx vite build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "preview": "npx vite preview"
+    "preview": "npx vite preview",
+    "test": "node --test src/product/*.test.js && node scripts/assert-no-legacy-routes.mjs && node scripts/assert-product-invariants.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",

@@ -1,0 +1,27 @@
+# Production bands
+
+Wire alerts (Vercel, uptime, APM) to open a Linear issue that names the band.
+
+- metric: error_rate_pct
+  service: sw247a
+  band: [0, 1.0]
+  on_breach:
+    severity: critical
+    action: open_linear_issue
+    write_intent: true
+
+- metric: p99_latency_ms
+  service: sw247a
+  band: [0, 400]
+  on_breach:
+    severity: high
+    action: open_linear_issue
+    write_intent: true
+
+- metric: production_ready
+  service: sw247a
+  band: [1, 1]
+  on_breach:
+    severity: critical
+    action: open_linear_issue
+    write_intent: true

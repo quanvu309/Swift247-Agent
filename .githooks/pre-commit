@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Monad pre-commit: run the product test command.
+# Enable with: git config core.hooksPath .githooks
+set -euo pipefail
+
+if [ -f package.json ]; then
+  if command -v npm >/dev/null 2>&1; then
+    npm test
+    exit 0
+  fi
+fi
+
+echo "pre-commit: no npm test found; add a test command or adjust .githooks/pre-commit" >&2
+exit 1

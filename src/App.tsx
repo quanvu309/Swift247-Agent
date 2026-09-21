@@ -13,6 +13,19 @@ import { AgentRunDetail } from './pages/AgentRunDetail';
 import { OpsQueue } from './pages/OpsQueue';
 import { OpsCaseDetail } from './pages/OpsCaseDetail';
 import { SmartKargo } from './pages/SmartKargo';
+import { CATCH_ALL_REDIRECT, ROOT_REDIRECT, appPageRoutes } from './product/appRoutes.js';
+
+const pages: Record<string, React.ComponentType> = {
+  FlowDesign,
+  Orders,
+  OrderDetail,
+  AgentRuns,
+  AgentRunDetail,
+  OpsQueue,
+  OpsCaseDetail,
+  SmartKargo,
+  Account
+};
 
 interface AppProps {
   /** Run the compliance agent automatically as soon as a shipper submits documents. */
@@ -28,17 +41,12 @@ export function App({ autoRunOnSubmit = true, requireOpsApproval = true }: AppPr
         <BrowserRouter>
           <AppShell>
           <Routes>
-            <Route path="/" element={<Navigate to="/design" replace />} />
-            <Route path="/design" element={<FlowDesign />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/orders/:id" element={<OrderDetail />} />
-            <Route path="/executions" element={<AgentRuns />} />
-            <Route path="/executions/:id" element={<AgentRunDetail />} />
-            <Route path="/approvals" element={<OpsQueue />} />
-            <Route path="/approvals/:id" element={<OpsCaseDetail />} />
-            <Route path="/connections" element={<SmartKargo />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="*" element={<Navigate to="/design" replace />} />
+            <Route path="/" element={<Navigate to={ROOT_REDIRECT} replace />} />
+            {appPageRoutes.map((route) => {
+              const Page = pages[route.page];
+              return <Route key={route.path} path={route.path} element={<Page />} />;
+            })}
+            <Route path="*" element={<Navigate to={CATCH_ALL_REDIRECT} replace />} />
           </Routes>
           </AppShell>
           <Toaster position="bottom-right" closeButton />
