@@ -56,8 +56,18 @@ if (/pages\/Flows/.test(app) || /<Flows\b/.test(app)) {
   console.error('App still mounts the Flows landing.');
   process.exit(1);
 }
-if (!app.includes('<Route path="/" element={<Navigate to="/design" replace />} />')) {
-  console.error('App must send / to /design.');
+if (!app.includes("from './product/appRoutes.js'") || !app.includes('to={ROOT_REDIRECT}')) {
+  console.error('App must send / through ROOT_REDIRECT from appRoutes.js.');
+  process.exit(1);
+}
+
+const routes = readFileSync(join(srcRoot, 'product/appRoutes.js'), 'utf8');
+if (!routes.includes("export const ROOT_REDIRECT = '/design'")) {
+  console.error('ROOT_REDIRECT must be /design.');
+  process.exit(1);
+}
+if (routes.includes("/flows")) {
+  console.error('appRoutes.js must not mention /flows.');
   process.exit(1);
 }
 

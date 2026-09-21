@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { DocType, Shipment, TimelineEvent } from '../types/cargo';
 import { initialShipments } from '../data/shipments';
+import { decideCargoGate } from '../product/cargoGate.js';
 import { buildMessageDraft, buildSteps } from '../utils/agent';
 
 interface WorkflowConfig {
@@ -80,27 +81,14 @@ export function WorkflowProvider({
 
       schedule(4600, () =>
       update(id, (s) => {
-        if (!s.pendingFindings.length) {
-          return {
-            ...s,
-            stage: 'compliance_ok',
-            riskScore: 8,
-            steps: buildSteps({
-              ocr: 'done',
-              crosscheck: 'done',
-              decision: 'done',
-              flag: 'skipped',
-              handoff: 'skipped'
-            }),
-            timeline: [...s.timeline, event('agent', 'Cleared. No issues')]
-          };
-        }
+        const gate = decideCargoGate(s.pendingFindings);
         return {
           ...s,
-          stage: 'flagged',
-          findings: s.pendingFindings,
-          steps: buildSteps({ ocr: 'done', crosscheck: 'done', decision: 'done', flag: 'running' }),
-          timeline: [...s.timeline, event('agent', `${s.pendingFindings.length} issues found`)]
+          stage: gate.stage,
+          findings: gate.findings,
+          steps: buildSteps(gate.steps),
+          timeline: [...s.timeline, event('agent', gate.timelineLabel)],
+          ...(gate.riskScore === undefined ? {} : { riskScore: gate.riskScore })
         };
       })
       );
