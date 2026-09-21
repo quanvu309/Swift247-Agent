@@ -1,0 +1,20 @@
+---
+description: Follow the Monad AI-native SDLC flow for all non-trivial work
+alwaysApply: true
+---
+
+# Monad SDLC
+
+You are working in a product repo that follows Monad.
+
+1. Read `AGENTS.md` and `docs/agents/issue-tracker.md` before changing code.
+2. For non-trivial work, use `docs/changes/<LINEAR-ID>-short-slug/` with `intent.md`, then `spec.md`, then `plan.md`. Do not write implementation code before the plan is accepted.
+3. One-line fixes may skip the three artifacts but still need a branch and PR that names the Linear id.
+4. Flow skills: `change-docs`, `grill-spec`, `smallest-diff`, `tdd`, `secure-change`, `prove-it`, `shipping-check`, `review-change`, `diagnose`, `ui-craft`.
+5. Brand, copy, and product-specific layout stay in the product. Shared interface craft (motion, press, a11y) is `ui-craft`.
+6. Prefer the smallest diff that solves the stated problem. Name the data shape before writing logic.
+7. Implement with `tdd` at seams named in `plan.md`. Diagnose production bugs with `diagnose` before fixing. Prove on the real surface with `prove-it`.
+8. Comments only for non-obvious why. No phase narration in code.
+9. Never deploy. Never commit unless the human asks after reviewing the diff. Pause for irreversible actions (force-push, production deploy, data deletion).
+10. If implementation leaves the plan, update `plan.md` in the same change.
+11. No em dashes in repo prose or agent replies for this project.
