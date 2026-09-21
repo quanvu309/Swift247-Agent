@@ -2,7 +2,7 @@
 
 Linear: RDS-1021
 Source: docs/changes/RDS-1021-showcase-scan-docs/intent.md
-Status: accepted (motion amendment draft)
+Status: accepted (motion amendment; Lead locked as bar)
 Date: 2026-09-21
 
 ## Approach
@@ -22,10 +22,11 @@ Smallest-diff: one new page module, a small scan visual (inline or sibling compo
 Quân asked for a stronger paper-scan feel on the same PR. Concrete bar for `ShowcaseScanDoc`:
 
 1. **Paper frame.** Demo AWB sits on a clear sheet: card border, light paper shadow, readable field rows. Demo label stays visible so it is not mistaken for a real shipment.
-2. **Scan band.** One vertical sweep, top to bottom. Band height about 8 to 12px (or ~3 to 4% of the sheet height), higher contrast than the first cut, using existing primary or ring tokens. Soft trail behind the band is allowed. No particle field, no second palette glow.
+2. **Scan band.** One vertical sweep, top to bottom. Band height about 8 to 12px (or ~3 to 4% of the sheet height). Must be **visibly opaque** in the built CSS: use solid `bg-primary` / `bg-ring` or an inline `rgba`/`hsla` that renders. Do not use Tailwind opacity modifiers such as `bg-primary/25` or `via-primary/70` unless those utilities are confirmed present in the built stylesheet. Soft trail behind the band is allowed only if it also paints. No particle field, no second palette glow.
 3. **Timing.** Sweep about 2 to 2.5s once per cycle. After the band finishes, hold the gate result ("Cleared" or equivalent) on screen at least 1.5s before any loop restart.
 4. **Reduced motion (grill A, unchanged).** If `prefers-reduced-motion: reduce`, skip the sweep. Show the final frame plus short caption immediately. Page stays usable.
 5. **Deps.** Still `framer-motion` or CSS only. No Lottie or new packages.
+6. **Prove bar.** Live `/showcase` must show a moving band the eye can follow. Status text change alone is a fail.
 
 ## Interfaces affected
 
@@ -48,7 +49,7 @@ UI of Flow Design, executions, approvals, and other pages does not change.
 5. CTA. Accepted: primary button to `/design`. No fake "Book a demo" or invented metrics.
 6. Doc copy. Accepted: clearly demo fields (no real customer PII).
 7. Motion library. Accepted: reuse `framer-motion` or CSS only.
-8. Motion intensity. Amendment draft from SW Loop pick 2 (2026-09-21). Pending Quân ack on the Motion criteria section, then Build revises PR #12.
+8. Motion intensity. Pick 2 locked. Lead set this Motion criteria section as the bar for PR #12. Preview finding: first-cut band used missing opacity utilities and painted invisible. Build must revise to opaque/visible band before Prove.
 
 ## Explicitly rejected alternatives
 
@@ -61,6 +62,7 @@ UI of Flow Design, executions, approvals, and other pages does not change.
 - New animation package. `framer-motion` is already present.
 - Accept the thin first-cut sweep as final (pick 1). Rejected by Quân pick 2.
 - Merge thin cut and file a follow-up only (pick 3). Rejected by Quân pick 2.
+- Invisible scan via missing `bg-primary/N` utilities. Ship block. Fail prove-it.
 
 ## Risks
 
@@ -69,9 +71,9 @@ UI of Flow Design, executions, approvals, and other pages does not change.
 - Fake doc mistaken for a real shipment. Label it as demo on the page.
 - Route table drift if `App.tsx` gains a page without `appPageRoutes`. Tests must cover both.
 - Nav badge noise. Showcase gets no ops/agent badge.
-- Stronger band still reading as "quiet". Prove-it on preview `/showcase` must confirm paper frame and hold are obvious without a second palette.
+- Band still invisible after revise if opacity utilities are used again. Prove-it must confirm a visible moving band, not only status copy.
 
 ## Sign-off
 
 Quân Vũ accepted Gate 1 in SW Loop, 2026-09-21 ("good").
-Motion amendment (pick 2): pending Quân ack in SW Loop before Build revises PR #12.
+Motion amendment (pick 2): Lead locked as bar for PR #12 revise, 2026-09-21. Quân chat ack still welcome; Build proceeds on Lead cut.
