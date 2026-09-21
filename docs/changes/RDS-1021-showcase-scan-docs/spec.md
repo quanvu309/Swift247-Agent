@@ -2,7 +2,7 @@
 
 Linear: RDS-1021
 Source: docs/changes/RDS-1021-showcase-scan-docs/intent.md
-Status: draft
+Status: accepted
 Date: 2026-09-21
 
 ## Approach
@@ -58,4 +58,4 @@ UI of Flow Design, executions, approvals, and other pages does not change.
 
 ## Sign-off
 
-Pending Quân accept in SW Loop.
+Quân Vũ accepted in SW Loop, 2026-09-21 ("good"). Gate 1 closed.
