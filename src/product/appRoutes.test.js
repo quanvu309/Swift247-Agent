@@ -32,4 +32,12 @@ describe('app routes', () => {
   it('does not mount / as a page', () => {
     assert.equal(isPageRoute('/'), false);
   });
+
+  it('mounts Showcase at /showcase', () => {
+    assert.equal(isPageRoute('/showcase'), true);
+    assert.equal(
+      appPageRoutes.some((route) => route.path === '/showcase' && route.page === 'Showcase'),
+      true
+    );
+  });
 });

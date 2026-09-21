@@ -2,7 +2,7 @@
 
 Linear: RDS-1021
 Source: docs/changes/RDS-1021-showcase-scan-docs/spec.md
-Status: draft
+Status: accepted
 Date: 2026-09-21
 
 ## Files to change, in order
@@ -46,3 +46,7 @@ Riskiest step first: red route test for `/showcase`, then green the route table,
 Rejected: new animation package, remounting Flows, replacing `/` with Showcase, abstract particle-only scan (spec).
 
 TDD order for implementation: fail `appRoutes.test.js` on `/showcase`, update `appRoutes.js`, build page modules, wire `App.tsx` and nav last.
+
+## Sign-off
+
+Quân Vũ accepted Gate 2 in SW Loop, 2026-09-21. Status moved from draft to accepted.
