@@ -2,7 +2,7 @@
 
 Linear: RDS-1021
 Source: docs/changes/RDS-1021-showcase-scan-docs/intent.md
-Status: accepted (motion amendment; Lead locked as bar)
+Status: accepted
 Date: 2026-09-21
 
 ## Approach
@@ -49,7 +49,7 @@ UI of Flow Design, executions, approvals, and other pages does not change.
 5. CTA. Accepted: primary button to `/design`. No fake "Book a demo" or invented metrics.
 6. Doc copy. Accepted: clearly demo fields (no real customer PII).
 7. Motion library. Accepted: reuse `framer-motion` or CSS only.
-8. Motion intensity. Pick 2 locked. Lead set this Motion criteria section as the bar for PR #12. Preview finding: first-cut band used missing opacity utilities and painted invisible. Build must revise to opaque/visible band before Prove.
+8. Motion intensity. Resolved. Pick 2 + Lead bar. Prove GREEN on `8d351e4` (visible solid band).
 
 ## Explicitly rejected alternatives
 
@@ -76,4 +76,4 @@ UI of Flow Design, executions, approvals, and other pages does not change.
 ## Sign-off
 
 Quân Vũ accepted Gate 1 in SW Loop, 2026-09-21 ("good").
-Motion amendment (pick 2): Lead locked as bar for PR #12 revise, 2026-09-21. Quân chat ack still welcome; Build proceeds on Lead cut.
+Motion amendment (pick 2): Lead locked as bar; Prove GREEN on `8d351e4`. Spec Review pass.
