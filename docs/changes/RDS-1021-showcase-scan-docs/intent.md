@@ -2,7 +2,7 @@
 
 Linear: RDS-1021
 Author: SW Spec
-Status: draft
+Status: accepted
 Date: 2026-09-21
 
 ## Requested by
