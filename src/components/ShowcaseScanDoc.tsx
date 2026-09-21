@@ -5,6 +5,9 @@ import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import { SCAN_REDUCED_MOTION_CAPTION, scanMotionMode } from '../product/scanMotion.js';
 import { Badge } from './ui/Badge';
 
+const SCAN_SWEEP_SECONDS = 2.3;
+const SCAN_BAND_PX = 10;
+
 const demoFields = [
   { label: 'AWB', value: 'SW247-DEMO-0001' },
   { label: 'Order', value: 'DEMO-ORD-0001' },
@@ -29,8 +32,8 @@ export function ShowcaseScanDoc() {
   }, [mode]);
 
   return (
-    <figure className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-      <div className="flex items-center justify-between gap-3 border-b border-border bg-secondary/60 px-5 py-3">
+    <figure className="overflow-hidden rounded-xl border border-border bg-card shadow-md">
+      <div className="flex items-center justify-between gap-3 border-b border-border bg-secondary px-5 py-3">
         <div className="min-w-0">
           <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-muted-foreground">
             Demo air waybill
@@ -46,14 +49,16 @@ export function ShowcaseScanDoc() {
         {mode === 'sweep' && !swept ?
         <motion.div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 z-10 h-16"
-          initial={{ y: '-4rem' }}
-          animate={{ y: '22rem' }}
-          transition={{ duration: 2.1, ease: [0.4, 0, 0.2, 1] }}
-          onAnimationComplete={() => setSwept(true)}>
-          <div className="h-full bg-gradient-to-b from-transparent via-primary/25 to-transparent" />
-          <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-primary/70" />
-        </motion.div> :
+          className="pointer-events-none absolute inset-x-0 z-10"
+          style={{
+            height: SCAN_BAND_PX,
+            backgroundColor: '#5B1A63',
+            boxShadow: '0 12px 18px rgba(142, 31, 110, 0.45)'
+          }}
+          initial={{ top: -SCAN_BAND_PX }}
+          animate={{ top: '100%' }}
+          transition={{ duration: SCAN_SWEEP_SECONDS, ease: [0.4, 0, 0.2, 1] }}
+          onAnimationComplete={() => setSwept(true)} /> :
         null}
 
         <dl className="grid grid-cols-2 gap-x-4 gap-y-4 px-5 py-5 sm:px-6">
@@ -69,7 +74,7 @@ export function ShowcaseScanDoc() {
 
         <div className="border-t border-border px-5 py-4 sm:px-6" aria-live="polite">
           {showResult ?
-          <div className="flex items-center gap-3 rounded-lg border border-border bg-muted/50 p-3">
+          <div className="flex items-center gap-3 rounded-lg border border-border bg-muted p-3">
               <CheckCircle2 className="h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
               <div>
                 <p className="text-sm font-medium text-foreground">Cleared. No issues</p>

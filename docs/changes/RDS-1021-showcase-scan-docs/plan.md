@@ -45,6 +45,8 @@ Riskiest step first: red route test for `/showcase`, then green the route table,
 
 Rejected: new animation package, remounting Flows, replacing `/` with Showcase, abstract particle-only scan (spec).
 
+Visible scan band must use solid `bg-primary` / `bg-ring` or inline rgba/hsla (`#5B1A63`, `#8E1F6E`). Opacity slash utilities (`bg-primary/N`, `via-primary/N`) do not exist in the built CSS and are banned for this scan.
+
 TDD order for implementation: fail `appRoutes.test.js` on `/showcase`, update `appRoutes.js`, build page modules, wire `App.tsx` and nav last.
 
 ## Sign-off
