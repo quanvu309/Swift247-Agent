@@ -2,7 +2,7 @@
 
 Linear: RDS-1021
 Source: docs/changes/RDS-1021-showcase-scan-docs/intent.md
-Status: accepted
+Status: accepted (motion amendment draft)
 Date: 2026-09-21
 
 ## Approach
@@ -17,12 +17,23 @@ Wire the page through the existing seams: `appPageRoutes`, the `pages` map in `A
 
 Smallest-diff: one new page module, a small scan visual (inline or sibling component), route + nav + tests that assert `/showcase` is mounted and `/` still redirects to `/design`.
 
+### Motion criteria (amendment, pick 2)
+
+Quân asked for a stronger paper-scan feel on the same PR. Concrete bar for `ShowcaseScanDoc`:
+
+1. **Paper frame.** Demo AWB sits on a clear sheet: card border, light paper shadow, readable field rows. Demo label stays visible so it is not mistaken for a real shipment.
+2. **Scan band.** One vertical sweep, top to bottom. Band height about 8 to 12px (or ~3 to 4% of the sheet height), higher contrast than the first cut, using existing primary or ring tokens. Soft trail behind the band is allowed. No particle field, no second palette glow.
+3. **Timing.** Sweep about 2 to 2.5s once per cycle. After the band finishes, hold the gate result ("Cleared" or equivalent) on screen at least 1.5s before any loop restart.
+4. **Reduced motion (grill A, unchanged).** If `prefers-reduced-motion: reduce`, skip the sweep. Show the final frame plus short caption immediately. Page stays usable.
+5. **Deps.** Still `framer-motion` or CSS only. No Lottie or new packages.
+
 ## Interfaces affected
 
 - `src/product/appRoutes.js`: add `{ path: '/showcase', page: 'Showcase' }`
 - `src/App.tsx`: import and register `Showcase` in `pages`
 - `src/data/navigation.ts`: sidebar link labeled Showcase
 - New `src/pages/Showcase.tsx` (and optional small scan child under `src/components/`)
+- `src/components/ShowcaseScanDoc.tsx`: motion must meet the criteria above
 - `src/product/*.test.js` and/or assert scripts: route mounted, root still `/design`, Flows still off
 - `PRODUCT.md` Operating Context: list `/showcase`
 
@@ -32,11 +43,12 @@ UI of Flow Design, executions, approvals, and other pages does not change.
 
 1. Route and home. Resolved in grill (A). `/showcase` in-app. `/` stays `/design`.
 2. Scan meaning. Resolved in grill (A). Stylized scan over a fake AWB/invoice tied to the cargo-check story, not abstract particles.
-3. Reduced motion. Resolved in grill (A). Final frame + short caption.
-4. Nav lane. Accepted in this draft: Control center, sibling of Flow Design. Override before accept if wrong.
-5. CTA. Accepted in this draft: primary button to `/design`. No fake "Book a demo" or invented metrics.
-6. Doc copy. Accepted in this draft: clearly demo fields (no real customer PII). Labels may echo `src/data` shipment vocabulary without quoting invented customers.
-7. Motion library. Accepted in this draft: reuse `framer-motion` or CSS only. Do not add Lottie or another dep.
+3. Reduced motion. Resolved in grill (A). Final frame + short caption. Unchanged by pick 2.
+4. Nav lane. Accepted: Control center, sibling of Flow Design.
+5. CTA. Accepted: primary button to `/design`. No fake "Book a demo" or invented metrics.
+6. Doc copy. Accepted: clearly demo fields (no real customer PII).
+7. Motion library. Accepted: reuse `framer-motion` or CSS only.
+8. Motion intensity. Amendment draft from SW Loop pick 2 (2026-09-21). Pending Quân ack on the Motion criteria section, then Build revises PR #12.
 
 ## Explicitly rejected alternatives
 
@@ -47,6 +59,8 @@ UI of Flow Design, executions, approvals, and other pages does not change.
 - Hide the visual under reduced motion (grill B). Violates usable reduced-motion path.
 - Remount Flows as Showcase. Forbidden.
 - New animation package. `framer-motion` is already present.
+- Accept the thin first-cut sweep as final (pick 1). Rejected by Quân pick 2.
+- Merge thin cut and file a follow-up only (pick 3). Rejected by Quân pick 2.
 
 ## Risks
 
@@ -55,7 +69,9 @@ UI of Flow Design, executions, approvals, and other pages does not change.
 - Fake doc mistaken for a real shipment. Label it as demo on the page.
 - Route table drift if `App.tsx` gains a page without `appPageRoutes`. Tests must cover both.
 - Nav badge noise. Showcase gets no ops/agent badge.
+- Stronger band still reading as "quiet". Prove-it on preview `/showcase` must confirm paper frame and hold are obvious without a second palette.
 
 ## Sign-off
 
-Quân Vũ accepted in SW Loop, 2026-09-21 ("good"). Gate 1 closed.
+Quân Vũ accepted Gate 1 in SW Loop, 2026-09-21 ("good").
+Motion amendment (pick 2): pending Quân ack in SW Loop before Build revises PR #12.
