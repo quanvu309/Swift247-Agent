@@ -31,7 +31,9 @@ import { initialFlowEdges, initialFlowNodes } from '../data/flowGraph';
 import { FlowTemplate, buildTemplate, flowTemplates } from '../data/flowTemplates';
 import { FlowNodeData, FlowNodeStatus, PaletteNode } from '../types/flow';
 import { Shipment, StepStatus } from '../types/cargo';
+import { SampleOrderRun } from '../components/SampleOrderRun';
 import { useWorkflow } from '../contexts/WorkflowContext';
+import { SAMPLE_ORDER_ID } from '../product/sampleOrder.js';
 
 const nodeTypes = { workflow: WorkflowNode };
 
@@ -84,14 +86,16 @@ function FlowCanvas() {
   const [showInspector, setShowInspector] = useState(true);
   const [searchParams] = useSearchParams();
 
-  const activeShipment = useMemo(
-    () =>
-    shipments.find((s) => s.stage === 'checking') ??
-    shipments.find((s) => s.stage === 'flagged') ??
-    shipments.find((s) => s.stage === 'submitted') ??
-    shipments[0],
-    [shipments]
-  );
+  const activeShipment = useMemo(() => {
+    const sample = shipments.find((s) => s.id === SAMPLE_ORDER_ID);
+    if (sample && sample.stage !== 'draft') return sample;
+    return (
+      shipments.find((s) => s.stage === 'checking') ??
+      shipments.find((s) => s.stage === 'flagged') ??
+      shipments.find((s) => s.stage === 'submitted') ??
+      shipments[0]
+    );
+  }, [shipments]);
 
   useEffect(() => {
     const id = searchParams.get('flow');
@@ -317,6 +321,10 @@ function FlowCanvas() {
             <Background variant={BackgroundVariant.Dots} gap={18} size={1} className="!bg-transparent" />
             <Controls showInteractive={false} />
             <MiniMap pannable zoomable className="!bg-background" />
+
+            <Panel position="top-left">
+              <SampleOrderRun />
+            </Panel>
 
             {activeShipment ?
             <Panel position="top-right">

@@ -12,6 +12,7 @@
 
 - `src/product/appRoutes.js`: mounted route table. Seam: `ROOT_REDIRECT`, `CATCH_ALL_REDIRECT`, `appPageRoutes`, `isPageRoute`.
 - `src/product/cargoGate.js`: pickup gate. Seam: `decideCargoGate(pendingFindings)`.
+- `src/product/sampleOrder.js`: sample pack. Seam: `matchSamplePack`, `applySamplePack`, `describeSampleResult`.
 - `src/App.tsx`: renders the route table.
 - `src/contexts/WorkflowContext.tsx`: demo cargo check. Calls `decideCargoGate` at the decision step.
 - `src/pages/FlowDesign.tsx`: canvas. `/` redirects here.

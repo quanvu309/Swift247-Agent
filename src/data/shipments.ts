@@ -1,3 +1,4 @@
+import { SAMPLE_ORDER_ID, SAMPLE_PACK } from '../product/sampleOrder.js';
 import { Shipment } from '../types/cargo';
 import { buildMessageDraft, buildSteps } from '../utils/agent';
 
@@ -317,4 +318,45 @@ const o5: Shipment = {
   timeline: [{ id: 't1', at: '09:20', actor: 'customer', label: 'Draft order' }]
 };
 
-export const initialShipments: Shipment[] = [o1, o3, o4, o2, o5];
+export function createSampleShipment(): Shipment {
+  return {
+    id: SAMPLE_ORDER_ID,
+    trackingNo: 'SW247-SAMPLE-01',
+    orderRef: 'ORD-2026-SAMPLE',
+    sender: 'Lê Minh Châu',
+    contactPhone: '0903 221 018',
+    contactEmail: 'chau.le@swift247.vn',
+    channel: 'Swift247 app',
+    recipient: 'Phạm Quốc Huy',
+    recipientPhone: '0912 774 330',
+    origin: 'SGN',
+    destination: 'HAN',
+    service: 'Same-day',
+    flightNo: 'VJ122',
+    pickupAt: 'Today 15:00',
+    pieces: 1,
+    weightKg: 1.1,
+    itemCategory: 'Cotton shirts, 3 pieces',
+    isRestricted: false,
+    declaredValue: 890000,
+    codAmount: 0,
+    stage: 'draft',
+    riskScore: 0,
+    createdAt: '2026-09-22T08:00:00',
+    docs: SAMPLE_PACK.map((item) => ({
+      id: `sample-${item.docType}`,
+      type: item.docType,
+      fileName: '',
+      pages: 0,
+      uploadedAt: '',
+      status: 'missing'
+    })),
+    extracted: [],
+    findings: [],
+    pendingFindings: [],
+    steps: buildSteps({}),
+    timeline: [{ id: 't0', at: '08:00', actor: 'customer', label: 'Sample order created' }]
+  };
+}
+
+export const initialShipments: Shipment[] = [createSampleShipment(), o1, o3, o4, o2, o5];

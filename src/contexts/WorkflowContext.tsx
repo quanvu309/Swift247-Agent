@@ -1,7 +1,8 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { DocType, Shipment, TimelineEvent } from '../types/cargo';
-import { initialShipments } from '../data/shipments';
+import { createSampleShipment, initialShipments } from '../data/shipments';
 import { decideCargoGate } from '../product/cargoGate.js';
+import { SAMPLE_ORDER_ID, applySamplePack } from '../product/sampleOrder.js';
 import { buildMessageDraft, buildSteps } from '../utils/agent';
 
 interface WorkflowConfig {
@@ -13,6 +14,8 @@ interface WorkflowContextValue extends WorkflowConfig {
   shipments: Shipment[];
   getShipment: (id: string) => Shipment | undefined;
   runCheck: (id: string) => void;
+  attachSamplePack: (fileNames: string[]) => void;
+  resetSampleOrder: () => void;
   sendMessage: (id: string, body: string, subject: string, by?: string) => void;
   resubmitDocuments: (id: string, docs: DocType[]) => void;
   acceptCargo: (id: string) => void;
@@ -40,6 +43,7 @@ export function WorkflowProvider({
 }: {children: React.ReactNode;autoRunOnSubmit: boolean;requireOpsApproval: boolean;}) {
   const [shipments, setShipments] = useState<Shipment[]>(initialShipments);
   const timers = useRef<number[]>([]);
+  const runTokens = useRef<Record<string, number>>({});
 
   useEffect(() => () => timers.current.forEach((t) => window.clearTimeout(t)), []);
 
@@ -53,6 +57,10 @@ export function WorkflowProvider({
 
   const runCheck = useCallback(
     (id: string) => {
+      const token = (runTokens.current[id] ?? 0) + 1;
+      runTokens.current[id] = token;
+      const stillThisRun = () => runTokens.current[id] === token;
+
       update(id, (s) => ({
         ...s,
         stage: 'checking',
@@ -62,58 +70,62 @@ export function WorkflowProvider({
         timeline: [...s.timeline, event('agent', 'Check started')]
       }));
 
-      schedule(1500, () =>
-      update(id, (s) => ({
-        ...s,
-        docs: s.docs.map((d) => d.status === 'processing' ? { ...d, status: 'extracted' } : d),
-        steps: buildSteps({ ocr: 'done', crosscheck: 'running' }),
-        timeline: [...s.timeline, event('agent', 'Documents read')]
-      }))
-      );
-
-      schedule(3200, () =>
-      update(id, (s) => ({
-        ...s,
-        steps: buildSteps({ ocr: 'done', crosscheck: 'done', decision: 'running' }),
-        timeline: [...s.timeline, event('smartkargo', 'Rules checked')]
-      }))
-      );
-
-      schedule(4600, () =>
-      update(id, (s) => {
-        const gate = decideCargoGate(s.pendingFindings);
-        return {
+      schedule(1500, () => {
+        if (!stillThisRun()) return;
+        update(id, (s) => ({
           ...s,
-          stage: gate.stage,
-          findings: gate.findings,
-          steps: buildSteps(gate.steps),
-          timeline: [...s.timeline, event('agent', gate.timelineLabel)],
-          ...(gate.riskScore === undefined ? {} : { riskScore: gate.riskScore })
-        };
-      })
-      );
+          docs: s.docs.map((d) => d.status === 'processing' ? { ...d, status: 'extracted' } : d),
+          steps: buildSteps({ ocr: 'done', crosscheck: 'running' }),
+          timeline: [...s.timeline, event('agent', 'Documents read')]
+        }));
+      });
 
-      schedule(6000, () =>
-      update(id, (s) => {
-        if (s.stage !== 'flagged') return s;
-        const draft = buildMessageDraft(s, s.findings);
-        if (requireOpsApproval) {
+      schedule(3200, () => {
+        if (!stillThisRun()) return;
+        update(id, (s) => ({
+          ...s,
+          steps: buildSteps({ ocr: 'done', crosscheck: 'done', decision: 'running' }),
+          timeline: [...s.timeline, event('smartkargo', 'Rules checked')]
+        }));
+      });
+
+      schedule(4600, () => {
+        if (!stillThisRun()) return;
+        update(id, (s) => {
+          const gate = decideCargoGate(s.pendingFindings);
           return {
             ...s,
-            steps: buildSteps({ ocr: 'done', crosscheck: 'done', decision: 'done', flag: 'done', handoff: 'pending' }),
-            message: draft,
-            timeline: [...s.timeline, event('agent', 'Message drafted for CX review')]
+            stage: gate.stage,
+            findings: gate.findings,
+            steps: buildSteps(gate.steps),
+            timeline: [...s.timeline, event('agent', gate.timelineLabel)],
+            ...(gate.riskScore === undefined ? {} : { riskScore: gate.riskScore })
           };
-        }
-        return {
-          ...s,
-          stage: 'awaiting_shipper',
-          steps: buildSteps({ ocr: 'done', crosscheck: 'done', decision: 'done', flag: 'done', handoff: 'skipped' }),
-          message: { ...draft, status: 'sent', sentAt: stamp() },
-          timeline: [...s.timeline, event('agent', 'Message auto-sent to customer')]
-        };
-      })
-      );
+        });
+      });
+
+      schedule(6000, () => {
+        if (!stillThisRun()) return;
+        update(id, (s) => {
+          if (s.stage !== 'flagged') return s;
+          const draft = buildMessageDraft(s, s.findings);
+          if (requireOpsApproval) {
+            return {
+              ...s,
+              steps: buildSteps({ ocr: 'done', crosscheck: 'done', decision: 'done', flag: 'done', handoff: 'pending' }),
+              message: draft,
+              timeline: [...s.timeline, event('agent', 'Message drafted for CX review')]
+            };
+          }
+          return {
+            ...s,
+            stage: 'awaiting_shipper',
+            steps: buildSteps({ ocr: 'done', crosscheck: 'done', decision: 'done', flag: 'done', handoff: 'skipped' }),
+            message: { ...draft, status: 'sent', sentAt: stamp() },
+            timeline: [...s.timeline, event('agent', 'Message auto-sent to customer')]
+          };
+        });
+      });
     },
     [requireOpsApproval, schedule, update]
   );
@@ -162,6 +174,28 @@ export function WorkflowProvider({
     [update]
   );
 
+  const attachSamplePack = useCallback(
+    (fileNames: string[]) => {
+      update(SAMPLE_ORDER_ID, (s) => {
+        const names = Array.isArray(fileNames) ? fileNames : [];
+        const next = applySamplePack(s, names, stamp());
+        return {
+          ...next,
+          steps: buildSteps({}),
+          timeline: names.length
+            ? [...s.timeline, event('customer', 'Sample pack uploaded')]
+            : s.timeline
+        };
+      });
+    },
+    [update]
+  );
+
+  const resetSampleOrder = useCallback(() => {
+    runTokens.current[SAMPLE_ORDER_ID] = (runTokens.current[SAMPLE_ORDER_ID] ?? 0) + 1;
+    setShipments((prev) => prev.map((s) => (s.id === SAMPLE_ORDER_ID ? createSampleShipment() : s)));
+  }, []);
+
   const value = useMemo<WorkflowContextValue>(
     () => ({
       shipments,
@@ -169,11 +203,23 @@ export function WorkflowProvider({
       requireOpsApproval,
       getShipment: (id: string) => shipments.find((s) => s.id === id),
       runCheck,
+      attachSamplePack,
+      resetSampleOrder,
       sendMessage,
       resubmitDocuments,
       acceptCargo
     }),
-    [acceptCargo, autoRunOnSubmit, requireOpsApproval, resubmitDocuments, runCheck, sendMessage, shipments]
+    [
+      acceptCargo,
+      attachSamplePack,
+      autoRunOnSubmit,
+      requireOpsApproval,
+      resetSampleOrder,
+      resubmitDocuments,
+      runCheck,
+      sendMessage,
+      shipments
+    ]
   );
 
   return <WorkflowContext.Provider value={value}>{children}</WorkflowContext.Provider>;
