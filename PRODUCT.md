@@ -14,7 +14,7 @@ Ops, CX, and product stakeholders at Swift247. They open Flow Design to see how 
 
 SAS is the Swift247 Agent System. One agent flow reads shipment documents, applies SmartKargo cargo rules, and either clears the order or drafts a customer message before pickup. Success is an honest gate. A truck does not leave on an unchecked file.
 
-The product opens on Flow Design. There is no Flows landing or run-volume homepage.
+The product opens on Flow Design. There is no Flows landing or run-volume homepage. Flow Design has a sample order run: upload one document pack, run the cargo gate, and read the result.
 
 ## Positioning
 
@@ -33,6 +33,7 @@ Demo data lives in `src/data`. There is no live analytics backend.
 ## Capabilities and Constraints
 
 - `/` sends visitors to `/design`. Keep `?flow=<id>` on the canvas. Default template is `full`.
+- The sample order run stays on `/design`. Do not add a sample-only route.
 - Sidebar has no Flows item. Remaining URLs still match their labels.
 - No Flows landing, no second homepage, and no run-volume or KPI Flows page.
 - Sticky desktop sidebar stays.
