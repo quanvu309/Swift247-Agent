@@ -1,150 +1,143 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { toast } from 'sonner';
-import { ArrowUpRight, PlugZap, RefreshCw, Search } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronRight, Search } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
 import { StageBadge } from '../components/StageBadge';
-import { Badge } from '../components/ui/Badge';
-import { Button } from '../components/ui/Button';
-import { Card, CardContent } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/Table';
-import { Tabs, TabsList, TabsTrigger } from '../components/ui/Tabs';
 import { useWorkflow } from '../contexts/WorkflowContext';
 import { Shipment } from '../types/cargo';
 import { formatVnd } from '../utils/format';
+import { cn } from '../utils/cn';
 
-type Filter = 'all' | 'open' | 'action' | 'done';
+type Filter = 'all' | 'hold' | 'waiting' | 'cleared' | 'new';
 
-function matchesFilter(order: Shipment, filter: Filter): boolean {
-  if (filter === 'all') return true;
-  if (filter === 'action') return order.stage === 'awaiting_shipper' || order.stage === 'draft';
-  if (filter === 'done') return order.stage === 'accepted' || order.stage === 'compliance_ok';
-  return ['submitted', 'checking', 'flagged'].includes(order.stage);
-}
+const FILTERS: {id: Filter;label: string;match: (s: Shipment) => boolean;}[] = [
+{ id: 'all', label: 'All', match: () => true },
+{ id: 'hold', label: 'On hold', match: (s) => s.stage === 'flagged' },
+{ id: 'waiting', label: 'Waiting on customer', match: (s) => s.stage === 'awaiting_shipper' },
+{ id: 'cleared', label: 'Cleared', match: (s) => s.stage === 'compliance_ok' || s.stage === 'accepted' },
+{ id: 'new', label: 'Not checked', match: (s) => ['draft', 'submitted', 'checking'].includes(s.stage) }];
+
 
 export function Orders() {
   const { shipments } = useWorkflow();
+  const navigate = useNavigate();
   const [filter, setFilter] = useState<Filter>('all');
   const [query, setQuery] = useState('');
 
+  const active = FILTERS.find((f) => f.id === filter) ?? FILTERS[0];
+  const q = query.trim().toLowerCase();
   const rows = shipments.filter(
     (order) =>
-    matchesFilter(order, filter) && (
-    order.trackingNo.toLowerCase().includes(query.toLowerCase()) ||
-    order.sender.toLowerCase().includes(query.toLowerCase()) ||
-    order.itemCategory.toLowerCase().includes(query.toLowerCase()))
+    active.match(order) && (
+    !q ||
+    order.trackingNo.toLowerCase().includes(q) ||
+    order.orderRef.toLowerCase().includes(q) ||
+    order.sender.toLowerCase().includes(q) ||
+    order.itemCategory.toLowerCase().includes(q))
   );
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        eyebrow="Integration"
-        title="Orders"
-        actions={
-        <>
-            <Badge variant="secondary" className="gap-1.5">
-              <PlugZap className="h-3 w-3" aria-hidden="true" />
-              Synced 2 min ago
-            </Badge>
-            <Button
-            variant="outline"
-            size="sm"
-            onClick={() => toast.success('Orders synced', { description: 'Pulled from SmartKargo' })}>
-            
-              <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
-              Sync
-            </Button>
-          </>
-        } />
-      
+      <PageHeader title="Orders" description="Every order the agent has seen, with its pickup status." />
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Tabs value={filter} onValueChange={(value) => setFilter(value as Filter)}>
-          <TabsList>
-            <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="open">In check</TabsTrigger>
-            <TabsTrigger value="action">Waiting on customer</TabsTrigger>
-            <TabsTrigger value="done">Cleared</TabsTrigger>
-          </TabsList>
-        </Tabs>
-        <div className="relative w-full sm:w-72">
-          <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div role="tablist" aria-label="Filter orders" className="flex flex-wrap gap-2">
+          {FILTERS.map((f) => {
+            const count = shipments.filter(f.match).length;
+            const on = f.id === filter;
+            return (
+              <button
+                key={f.id}
+                type="button"
+                role="tab"
+                aria-selected={on}
+                onClick={() => setFilter(f.id)}
+                className={cn(
+                  'inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border px-3.5 text-sm transition-colors duration-150',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  on ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-background text-foreground hover:bg-muted'
+                )}>
+
+                {f.label}
+                <span className={cn('text-xs tabular-nums', on ? 'text-primary-foreground/80' : 'text-muted-foreground')}>{count}</span>
+              </button>);
+
+          })}
+        </div>
+        <div className="relative w-full lg:w-72">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Tracking no., sender, item"
+            placeholder="Search tracking, order, sender"
             aria-label="Search orders"
-            className="pl-9" />
-          
+            className="h-10 rounded-full bg-background pl-9" />
+
         </div>
       </div>
 
-      <Card>
-        <CardContent className="p-0">
-          {rows.length ?
-          <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Tracking</TableHead>
-                  <TableHead>Route</TableHead>
-                  <TableHead>Item</TableHead>
-                  <TableHead className="text-right">Value</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="w-10" />
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {rows.map((order) =>
-              <TableRow key={order.id}>
-                    <TableCell>
-                      <Link to={`/orders/${order.id}`} className="font-mono text-xs font-medium hover:underline">
-                        {order.trackingNo}
-                      </Link>
-                      <p className="text-[11px] text-muted-foreground">
-                        {order.sender}, {order.channel}
-                      </p>
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap text-sm">
-                      {order.origin} → {order.destination}
-                      <p className="text-xs text-muted-foreground">
-                        {order.service}, {order.pickupAt}
-                      </p>
-                    </TableCell>
-                    <TableCell className="max-w-[220px] text-sm">
-                      <span className="line-clamp-1">{order.itemCategory}</span>
-                      {order.isRestricted ?
-                  <span className="font-mono text-[11px] text-destructive">{order.restrictedType}</span> :
-                  null}
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap text-right text-sm tabular-nums">
-                      {formatVnd(order.declaredValue)}
-                      {order.codAmount ?
-                  <p className="font-mono text-[11px] text-muted-foreground">COD {formatVnd(order.codAmount)}</p> :
-                  null}
-                    </TableCell>
-                    <TableCell>
-                      <StageBadge stage={order.stage} />
-                    </TableCell>
-                    <TableCell>
-                      <Button variant="ghost" size="icon-sm" asChild>
-                        <Link to={`/orders/${order.id}`} aria-label={`Open ${order.trackingNo}`}>
-                          <ArrowUpRight className="h-3.5 w-3.5" />
-                        </Link>
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-              )}
-              </TableBody>
-            </Table> :
+      <div className="overflow-hidden rounded-2xl border border-border bg-card">
+        {rows.length ?
+        <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-border text-left text-xs text-muted-foreground">
+                <th scope="col" className="px-5 py-3 font-medium">Order</th>
+                <th scope="col" className="hidden px-5 py-3 font-medium md:table-cell">Route</th>
+                <th scope="col" className="hidden px-5 py-3 font-medium lg:table-cell">Item</th>
+                <th scope="col" className="hidden px-5 py-3 text-right font-medium sm:table-cell">Value</th>
+                <th scope="col" className="px-5 py-3 font-medium">Status</th>
+                <th scope="col" className="w-10"><span className="sr-only">Open</span></th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {rows.map((order) =>
+            <tr
+              key={order.id}
+              tabIndex={0}
+              onClick={() => navigate(`/orders/${order.id}`)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') navigate(`/orders/${order.id}`);
+              }}
+              aria-label={`Open ${order.trackingNo}`}
+              className="cursor-pointer transition-colors hover:bg-muted/50 focus-visible:bg-muted/60 focus-visible:outline-none">
 
-          <div className="px-6 py-16 text-center">
-              <p className="text-sm font-medium text-foreground">No orders here</p>
-              <p className="mt-1 text-sm text-muted-foreground">Try clearing the filters.</p>
-            </div>
-          }
-        </CardContent>
-      </Card>
+                  <td className="px-5 py-3.5">
+                    <p className="whitespace-nowrap font-mono text-[13px] font-medium text-foreground">{order.trackingNo}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {order.sender} · {order.channel}
+                    </p>
+                  </td>
+                  <td className="hidden whitespace-nowrap px-5 py-3.5 md:table-cell">
+                    <p className="text-foreground">
+                      {order.origin} → {order.destination}
+                    </p>
+                    <p className="text-xs text-muted-foreground">{order.service}</p>
+                  </td>
+                  <td className="hidden max-w-[220px] px-5 py-3.5 lg:table-cell">
+                    <p className="truncate text-foreground">{order.itemCategory}</p>
+                  </td>
+                  <td className="hidden whitespace-nowrap px-5 py-3.5 text-right tabular-nums sm:table-cell">
+                    <p className="text-foreground">{formatVnd(order.declaredValue)}</p>
+                    {order.codAmount ? <p className="text-xs text-muted-foreground">COD</p> : null}
+                  </td>
+                  <td className="px-5 py-3.5">
+                    <StageBadge stage={order.stage} />
+                  </td>
+                  <td className="pr-4">
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                  </td>
+                </tr>
+            )}
+            </tbody>
+          </table> :
+
+        <div className="px-6 py-16 text-center">
+            <p className="text-sm font-medium text-foreground">No orders match</p>
+            <p className="mt-1 text-sm text-muted-foreground">Try another filter or clear the search.</p>
+          </div>
+        }
+      </div>
     </div>);
 
 }

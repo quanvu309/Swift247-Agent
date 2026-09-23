@@ -7,8 +7,8 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "npx vite",
-    "build": "node scripts/assert-no-legacy-routes.mjs && npx vite build",
+    "dev": "node scripts/copy-ocr-assets.mjs && npx vite",
+    "build": "node scripts/assert-no-legacy-routes.mjs && node scripts/copy-ocr-assets.mjs && npx vite build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "preview": "npx vite preview",
     "test": "node --test src/product/*.test.js && node scripts/assert-no-legacy-routes.mjs && node scripts/assert-product-invariants.mjs"
@@ -31,14 +31,17 @@
     "class-variance-authority": "^0.7.1",
     "framer-motion": "^11.5.4",
     "lucide-react": "0.522.0",
+    "pdfjs-dist": "^4.10.38",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
     "recharts": "^2.15.4",
     "sonner": "^2.0.1",
-    "tailwind-merge": "latest"
+    "tailwind-merge": "latest",
+    "tesseract.js": "^5.1.1"
   },
   "devDependencies": {
+    "@tesseract.js-data/eng": "^1.0.0",
     "@types/node": "^20.11.18",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",

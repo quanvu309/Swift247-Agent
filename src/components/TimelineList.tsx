@@ -5,7 +5,7 @@ import { Actor, TimelineEvent } from '../types/cargo';
 const actorMeta: Record<Actor, {icon: React.ComponentType<{className?: string;}>;label: string;}> = {
   customer: { icon: User, label: 'Customer' },
   agent: { icon: Bot, label: 'AI agent' },
-  cx: { icon: Headset, label: 'CX team' },
+  cx: { icon: Headset, label: 'Operations' },
   smartkargo: { icon: Database, label: 'SmartKargo' }
 };
 

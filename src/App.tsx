@@ -1,31 +1,35 @@
 import React from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { Toaster } from './components/ui/Sonner';
 import { AppShell } from './components/AppShell';
 import { WorkflowProvider } from './contexts/WorkflowContext';
 import { SessionProvider } from './contexts/SessionContext';
 import { Account } from './pages/Account';
-import { FlowDesign } from './pages/FlowDesign';
+import { FlowBuilder, FlowDesign } from './pages/FlowDesign';
+import { Rules } from './pages/Rules';
 import { Orders } from './pages/Orders';
 import { OrderDetail } from './pages/OrderDetail';
-import { AgentRuns } from './pages/AgentRuns';
-import { AgentRunDetail } from './pages/AgentRunDetail';
 import { OpsQueue } from './pages/OpsQueue';
 import { OpsCaseDetail } from './pages/OpsCaseDetail';
 import { SmartKargo } from './pages/SmartKargo';
-import { CATCH_ALL_REDIRECT, ROOT_REDIRECT, appPageRoutes } from './product/appRoutes.js';
+import { CATCH_ALL_REDIRECT, LEGACY_REDIRECTS, ROOT_REDIRECT, appPageRoutes } from './product/appRoutes.js';
 
 const pages: Record<string, React.ComponentType> = {
   FlowDesign,
+  FlowBuilder,
+  Rules,
   Orders,
   OrderDetail,
-  AgentRuns,
-  AgentRunDetail,
   OpsQueue,
   OpsCaseDetail,
   SmartKargo,
   Account
 };
+
+function LegacyRedirect({ to }: {to: string;}) {
+  const params = useParams();
+  return <Navigate to={to.replace(':id', params.id ?? '')} replace />;
+}
 
 interface AppProps {
   /** Run the compliance agent automatically as soon as a shipper submits documents. */
@@ -46,6 +50,9 @@ export function App({ autoRunOnSubmit = true, requireOpsApproval = true }: AppPr
               const Page = pages[route.page];
               return <Route key={route.path} path={route.path} element={<Page />} />;
             })}
+            {LEGACY_REDIRECTS.map((r) =>
+            <Route key={r.from} path={r.from} element={<LegacyRedirect to={r.to} />} />
+            )}
             <Route path="*" element={<Navigate to={CATCH_ALL_REDIRECT} replace />} />
           </Routes>
           </AppShell>

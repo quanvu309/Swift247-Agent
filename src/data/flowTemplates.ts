@@ -61,7 +61,7 @@ export const flowTemplates: FlowTemplate[] = [
 {
   id: 'manual-review',
   name: 'Manual review only',
-  description: 'Every order goes to CX',
+  description: 'Every order goes to Operations',
   nodeIds: ['trigger', 'ocr', 'crosscheck', 'approval', 'request-docs'],
   edges: [
   { source: 'trigger', target: 'ocr' },

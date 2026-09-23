@@ -9,7 +9,6 @@ import { DocumentList } from '../components/DocumentList';
 import { StepTracker } from '../components/StepTracker';
 import { TimelineList } from '../components/TimelineList';
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/Alert';
-import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
@@ -41,7 +40,7 @@ export function OpsCaseDetail() {
         <CardContent className="py-16 text-center">
           <p className="text-sm font-medium">Order not found</p>
           <Button variant="outline" size="sm" className="mt-4" asChild>
-            <Link to="/approvals">Back to approvals</Link>
+            <Link to="/approvals">Back to To review</Link>
           </Button>
         </CardContent>
       </Card>);
@@ -52,47 +51,38 @@ export function OpsCaseDetail() {
 
   const approve = () => {
     sendMessage(order.id, body, subject, user.name);
-    toast.success('Message sent', { description: `${order.message?.channel} → ${order.message?.to}` });
+    toast.success('Email sent', { description: order.message?.to });
   };
 
   return (
     <div className="space-y-6">
       <PageHeader
         backTo="/approvals"
-        backLabel="Approvals"
-        eyebrow={order.sender}
-        title={order.trackingNo}
-        description={`${order.origin} → ${order.destination}, ${order.service}`}
+        backLabel="To review"
+        title={isSent ? 'Email sent' : 'Review the email'}
+        meta={<StageBadge stage={order.stage} />}
+        description={`${order.trackingNo} · ${order.sender} · ${order.origin} → ${order.destination}`}
         actions={
-        <>
-            <StageBadge stage={order.stage} />
-            <Button variant="outline" size="sm" asChild>
-              <Link to={`/executions/${order.id}`}>View run</Link>
-            </Button>
-          </>
+        <Button variant="outline" asChild>
+            <Link to={`/orders/${order.id}`}>View order</Link>
+          </Button>
         } />
       
 
       {isSent ?
       <Alert>
-          <AlertTitle>Already sent</AlertTitle>
+          <AlertTitle>Sent at {order.message?.sentAt}</AlertTitle>
           <AlertDescription>
-            {order.message?.channel} → {order.message?.to} at {order.message?.sentAt}. Waiting on the customer.
+            Delivered to {order.message?.to}. The order stays on hold until the customer replies.
           </AlertDescription>
         </Alert> :
-
-      <Alert variant="destructive">
-          <AlertTitle>{order.findings.length} issues flagged</AlertTitle>
-          <AlertDescription>Check the draft, edit if needed, then send.</AlertDescription>
-        </Alert>
-      }
+      null}
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,340px)]">
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Issues</CardTitle>
-              <CardDescription>Found by the agent</CardDescription>
+              <CardTitle className="text-base">Why the order is on hold</CardTitle>
             </CardHeader>
             <CardContent>
               <FindingsList findings={order.findings} />
@@ -104,27 +94,18 @@ export function OpsCaseDetail() {
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <MessageSquare className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                  <CardTitle className="text-base">Draft message</CardTitle>
+                  <CardTitle className="text-base">Email to the customer</CardTitle>
                 </div>
-                <Badge variant="secondary" className="text-[10px]">
-                  {order.message?.channel ?? 'Zalo'}
-                </Badge>
               </div>
-              <CardDescription>Nothing is sent until you approve it</CardDescription>
+              <CardDescription>Edit anything you like. Nothing is sent until you approve.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="to">To</Label>
-                  <Input id="to" value={order.message?.to ?? order.contactPhone} readOnly />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="channel">Channel</Label>
-                  <Input id="channel" value={`${order.message?.channel ?? 'Zalo'} + app push`} readOnly />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="to">To</Label>
+                <Input id="to" value={order.message?.to ?? order.contactEmail} readOnly className="bg-muted/50" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="subject">Title</Label>
+                <Label htmlFor="subject">Subject</Label>
                 <Input id="subject" value={subject} onChange={(e) => setSubject(e.target.value)} disabled={isSent} />
               </div>
               <div className="space-y-2">
@@ -145,8 +126,8 @@ export function OpsCaseDetail() {
                   `Sending as ${user.name} from ${sendingAccount.account}` :
                   'No mailbox connected'}
                 </p>
-                <Button onClick={approve} disabled={isSent || !body.trim() || !sendingAccount}>
-                  <Send className="h-3.5 w-3.5" aria-hidden="true" />
+                <Button size="lg" onClick={approve} disabled={isSent || !body.trim() || !sendingAccount}>
+                  <Send aria-hidden="true" />
                   {isSent ? 'Sent' : 'Approve & send'}
                 </Button>
               </div>
@@ -157,7 +138,7 @@ export function OpsCaseDetail() {
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Progress</CardTitle>
+              <CardTitle className="text-base">Agent progress</CardTitle>
             </CardHeader>
             <CardContent>
               <StepTracker steps={order.steps} compact />
@@ -166,7 +147,7 @@ export function OpsCaseDetail() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Uploads</CardTitle>
+              <CardTitle className="text-base">Documents</CardTitle>
             </CardHeader>
             <CardContent>
               <DocumentList docs={order.docs} />

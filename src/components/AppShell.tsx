@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Bell, ChevronRight, PanelLeftClose, PanelLeftOpen, PlugZap, X } from 'lucide-react';
+import { Bell, ChevronRight, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Separator } from './ui/Separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/Tooltip';
 import { SidebarNav } from './SidebarNav';
-import { ConnectionStatus } from './ConnectionStatus';
 import { UserMenu } from './UserMenu';
 import { useWorkflow } from '../contexts/WorkflowContext';
 import { resolveBreadcrumbs } from '../data/navigation';
@@ -19,7 +18,7 @@ const STORAGE_KEY = 'swift247.sidebar';
 export function AppShell({ children }: {children: React.ReactNode;}) {
   const { shipments } = useWorkflow();
   const location = useLocation();
-  const isCanvas = location.pathname === '/design';
+  const isCanvas = location.pathname === '/builder';
 
   const [width, setWidth] = useState(264);
   const [collapsed, setCollapsed] = useState(false);
@@ -137,7 +136,7 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
 
           <Separator />
 
-          <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden py-4">
+          <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden py-3">
             <SidebarNav collapsed={collapsed} counts={counts} />
           </div>
 
@@ -194,7 +193,7 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
                 </Button>
               </div>
               <Separator />
-              <div className="flex-1 overflow-y-auto py-4">
+              <div className="flex-1 overflow-y-auto py-3">
                 <SidebarNav counts={counts} onNavigate={() => setMobileOpen(false)} />
               </div>
             </div>
@@ -248,11 +247,9 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
               </ol>
             </nav>
 
-            <ConnectionStatus />
-
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon-sm" className="relative" aria-label={`${opsCount} approvals waiting`} asChild>
+                <Button variant="ghost" size="icon" className="relative" aria-label={`${opsCount} to review`} asChild>
                   <Link to="/approvals">
                     <Bell className="h-4 w-4" />
                     {opsCount > 0 ?
@@ -261,18 +258,7 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
                   </Link>
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>{opsCount} approvals waiting</TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon-sm" className="hidden md:inline-flex" aria-label="Connection and sync" asChild>
-                  <Link to="/connections">
-                    <PlugZap className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Connection & sync</TooltipContent>
+              <TooltipContent>{opsCount} to review</TooltipContent>
             </Tooltip>
 
             <UserMenu />
@@ -282,13 +268,13 @@ export function AppShell({ children }: {children: React.ReactNode;}) {
             className={cn(
               'min-w-0 flex-1',
               isCanvas && 'flex min-h-0 flex-col',
-              !isCanvas && 'px-4 py-7 md:px-8 md:py-9'
+              !isCanvas && 'bg-brand-lavender/40 px-4 py-7 md:px-8 md:py-10'
             )}>
             <div
               className={cn(
                 'mx-auto w-full',
                 isCanvas && 'flex min-h-0 flex-1 flex-col',
-                !isCanvas && 'max-w-[1180px]'
+                !isCanvas && 'max-w-[1120px]'
               )}>
               {children}
             </div>
