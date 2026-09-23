@@ -13,32 +13,32 @@ export const docLabels: Record<string, {en: string;vi: string;}> = {
 export const stepBlueprint: Omit<AgentStep, 'status'>[] = [
 {
   key: 'ocr',
-  label: 'Read documents',
-  detail: 'ID, invoice, item declaration, parcel photo',
+  label: 'Extract data',
+  detail: 'API + OCR on item declaration, invoice, parcel photo',
   owner: 'agent'
 },
 {
   key: 'crosscheck',
-  label: 'Check rules',
-  detail: 'Restricted items, KYC, COD, pricing',
+  label: 'Check documents and data',
+  detail: 'Complete doc set, data match, restricted items',
   owner: 'agent'
 },
 {
   key: 'decision',
-  label: 'Decision',
+  label: 'Complete and compliant?',
   detail: 'Clear for pickup or hold the order',
   owner: 'agent'
 },
 {
   key: 'flag',
-  label: 'Draft message',
-  detail: 'Zalo and app push asking the customer to fix it',
+  label: 'Flag and draft request email',
+  detail: 'Email asking the customer to resubmit',
   owner: 'agent'
 },
 {
   key: 'handoff',
-  label: 'CX review',
-  detail: 'Approve or edit before the customer is contacted',
+  label: 'Operations approves and sends',
+  detail: 'Approve or edit before the customer is emailed',
   owner: 'cx'
 }];
 
@@ -62,8 +62,8 @@ export function buildMessageDraft(shipment: Shipment, findings: Finding[]): Mess
   const issueLines = findings.map((f) => `• ${f.titleVi}`).join('\n');
 
   return {
-    channel: 'Zalo',
-    to: shipment.contactPhone,
+    channel: 'Email',
+    to: shipment.contactEmail,
     status: 'draft',
     subject: `Đơn ${shipment.trackingNo} cần bổ sung thông tin`,
     body: `Chào ${shipment.sender},
@@ -75,7 +75,7 @@ ${issueLines}
 ${uniqueMissing.length ? `Bạn bổ sung giúp Swift247:\n${missingLines}\n` : ''}
 Bổ sung ngay trong app Swift247 (mục Đơn của tôi → ${shipment.trackingNo}). Đơn giữ chỗ đến ${shipment.pickupAt}; hàng giá trị ${formatVnd(shipment.declaredValue)}.
 
-Cảm ơn bạn. Swift247 CX`
+Cảm ơn bạn. Đội vận hành Swift247`
   };
 }
 

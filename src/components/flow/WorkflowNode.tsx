@@ -15,6 +15,50 @@ export function WorkflowNode({ data, selected }: NodeProps) {
   const Icon = node.kind === 'output' && node.system === 'Messaging' ? Send : kind.icon;
   const isCondition = node.kind === 'condition';
 
+  if (node.compact) {
+    const quiet = '!h-2 !w-2 !border-0 !bg-transparent';
+    return (
+      <div
+        className={cn(
+          'relative w-[200px] rounded-2xl border bg-card px-3.5 py-3 text-left shadow-sm transition-all duration-300',
+          node.status === 'running' && 'border-brand-orange ring-4 ring-brand-orange/20',
+          node.status === 'done' && 'border-chart-2/60',
+          node.status === 'idle' && 'border-border',
+          node.status === 'skipped' && 'border-border opacity-40',
+          node.status === 'error' && 'border-destructive'
+        )}>
+        
+        {node.kind !== 'trigger' ?
+        <Handle type="target" position={Position.Left} className={quiet} /> :
+        <Handle id="resubmit" type="target" position={Position.Bottom} className={quiet} />}
+        <div className="flex items-center gap-2.5">
+          <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-xl', kind.tile)}>
+            {node.status === 'running' ?
+            <Loader2 className="h-[18px] w-[18px] animate-spin motion-reduce:animate-none" aria-hidden="true" /> :
+            <Icon className="h-[18px] w-[18px]" aria-hidden="true" />}
+          </span>
+          <p className="text-[15px] font-semibold leading-tight text-foreground">{node.title}</p>
+        </div>
+        <p className={cn('mt-2 flex items-center gap-1.5 text-xs font-medium', status.text)}>
+          <span className={cn('h-2 w-2 rounded-full', status.dot)} aria-hidden="true" />
+          {status.label}
+        </p>
+        {isCondition ?
+        <>
+            <Handle id="yes" type="source" position={Position.Right} style={{ top: '30%' }} className={quiet} />
+            <Handle id="no" type="source" position={Position.Right} style={{ top: '75%' }} className={quiet} />
+            <span className="pointer-events-none absolute -right-10 top-[18%] rounded-md bg-chart-2 px-1.5 py-0.5 text-[11px] font-semibold text-white">
+              YES
+            </span>
+            <span className="pointer-events-none absolute -right-9 top-[64%] rounded-md bg-destructive px-1.5 py-0.5 text-[11px] font-semibold text-white">
+              NO
+            </span>
+          </> :
+        <Handle type="source" position={Position.Right} className={quiet} />}
+      </div>);
+
+  }
+
   return (
     <div
       className={cn(
@@ -29,7 +73,7 @@ export function WorkflowNode({ data, selected }: NodeProps) {
       
       {node.kind !== 'trigger' ?
       <Handle type="target" position={Position.Left} className={handleClass} /> :
-      null}
+      <Handle id="resubmit" type="target" position={Position.Bottom} className={handleClass} />}
 
       <div className="flex items-start gap-2.5 p-3">
         <span className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-lg', kind.tile)}>

@@ -260,10 +260,10 @@ export function NodeInspector({
           variant="ghost"
           size="sm"
           className="h-7 px-2 text-xs"
-          onClick={() => navigate('/executions')}>
+          onClick={() => navigate('/orders')}>
           
             <ExternalLink className="h-3 w-3" aria-hidden="true" />
-            Executions
+            Orders
           </Button> :
         null}
         <Button size="sm" className="ml-auto h-7 px-3 text-xs" onClick={onClose}>

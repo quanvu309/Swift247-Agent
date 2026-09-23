@@ -40,7 +40,7 @@ export function StepTracker({ steps, compact = false }: {steps: AgentStep[];comp
               <p className="text-sm font-medium text-foreground">{step.label}</p>
               {step.owner === 'cx' ?
             <span className="rounded-md border border-border px-1.5 py-0.5 font-mono text-[10px] uppercase text-muted-foreground">
-                  CX
+                  Ops
                 </span> :
             null}
               {step.status === 'running' ?

@@ -1,24 +1,20 @@
-import React from 'react';
 import { FileCheck2, FileClock, FileWarning, FileX2 } from 'lucide-react';
-import { Badge } from './ui/Badge';
 import { CargoDocument } from '../types/cargo';
 import { docLabels } from '../utils/agent';
+import { cn } from '../utils/cn';
 
-const statusMeta: Record<
-  CargoDocument['status'],
-  {label: string;tone: 'default' | 'secondary' | 'destructive' | 'outline';}> =
-{
-  extracted: { label: 'Read', tone: 'secondary' },
-  processing: { label: 'Processing', tone: 'outline' },
-  missing: { label: 'Missing', tone: 'destructive' },
-  invalid: { label: 'Invalid', tone: 'destructive' }
+const statusMeta: Record<CargoDocument['status'], {label: string;className: string;}> = {
+  extracted: { label: 'Read', className: 'bg-chart-2/10 text-[#1E6B48]' },
+  processing: { label: 'Reading', className: 'bg-muted text-muted-foreground' },
+  missing: { label: 'Missing', className: 'bg-destructive/10 text-[#B42318]' },
+  invalid: { label: 'Needs a fix', className: 'bg-destructive/10 text-[#B42318]' }
 };
 
 function DocIcon({ status }: {status: CargoDocument['status'];}) {
-  if (status === 'extracted') return <FileCheck2 className="h-4 w-4 text-muted-foreground" aria-hidden="true" />;
-  if (status === 'processing') return <FileClock className="h-4 w-4 text-muted-foreground" aria-hidden="true" />;
-  if (status === 'invalid') return <FileWarning className="h-4 w-4 text-destructive" aria-hidden="true" />;
-  return <FileX2 className="h-4 w-4 text-destructive" aria-hidden="true" />;
+  if (status === 'extracted') return <FileCheck2 className="h-[18px] w-[18px] text-chart-2" aria-hidden="true" />;
+  if (status === 'processing') return <FileClock className="h-[18px] w-[18px] text-muted-foreground" aria-hidden="true" />;
+  if (status === 'invalid') return <FileWarning className="h-[18px] w-[18px] text-destructive" aria-hidden="true" />;
+  return <FileX2 className="h-[18px] w-[18px] text-destructive" aria-hidden="true" />;
 }
 
 export function DocumentList({ docs }: {docs: CargoDocument[];}) {
@@ -30,11 +26,12 @@ export function DocumentList({ docs }: {docs: CargoDocument[];}) {
           <li key={doc.id} className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
             <div className="flex min-w-0 items-center gap-3">
               <DocIcon status={doc.status} />
-              <p className="truncate text-sm text-foreground">{docLabels[doc.type].en}</p>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium text-foreground">{docLabels[doc.type].en}</p>
+                {doc.fileName ? <p className="truncate text-xs text-muted-foreground">{doc.fileName}</p> : null}
+              </div>
             </div>
-            <Badge variant={meta.tone} className="shrink-0 text-[10px]">
-              {meta.label}
-            </Badge>
+            <span className={cn('shrink-0 rounded-full px-2 py-0.5 text-xs font-medium', meta.className)}>{meta.label}</span>
           </li>);
 
       })}

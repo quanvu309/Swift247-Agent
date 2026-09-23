@@ -7,3 +7,8 @@ export const appPageRoutes: ReadonlyArray<{
 }>;
 
 export function isPageRoute(path: string): boolean;
+
+export const LEGACY_REDIRECTS: ReadonlyArray<{
+  from: string;
+  to: string;
+}>;

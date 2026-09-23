@@ -4,7 +4,7 @@ export type FlowNodeKind = 'trigger' | 'extract' | 'lookup' | 'condition' | 'act
 
 export type FlowNodeStatus = 'idle' | 'running' | 'done' | 'skipped' | 'error';
 
-export type FlowSystem = 'SmartKargo' | 'AI Agent' | 'Customer' | 'CX team' | 'Messaging';
+export type FlowSystem = 'SmartKargo' | 'AI Agent' | 'Customer' | 'CX team' | 'Ops team' | 'Messaging';
 
 export type FlowParamControl = 'text' | 'number' | 'select' | 'toggle' | 'tags';
 
@@ -28,6 +28,8 @@ export interface FlowNodeData extends Record<string, unknown> {
   notes: string;
   status: FlowNodeStatus;
   enabled: boolean;
+  /** Read-only presentation: bigger title, no technical lines. */
+  compact?: boolean;
 }
 
 export interface PaletteNode {

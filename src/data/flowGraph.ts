@@ -7,8 +7,8 @@ export const initialFlowNodes: Node<FlowNodeData>[] = [
   type: 'workflow',
   position: { x: 0, y: 200 },
   data: {
-    title: 'Order created',
-    subtitle: 'App, web & marketplace',
+    title: 'Receive documents',
+    subtitle: 'Order + document pack',
     kind: 'trigger',
     system: 'Customer',
     params: [
@@ -36,8 +36,8 @@ export const initialFlowNodes: Node<FlowNodeData>[] = [
   type: 'workflow',
   position: { x: 300, y: 200 },
   data: {
-    title: 'Read documents',
-    subtitle: 'ID, invoice, item photo',
+    title: 'Extract data',
+    subtitle: 'API + OCR',
     kind: 'extract',
     system: 'AI Agent',
     stepKey: 'ocr',
@@ -99,8 +99,8 @@ export const initialFlowNodes: Node<FlowNodeData>[] = [
   type: 'workflow',
   position: { x: 600, y: 240 },
   data: {
-    title: 'Check rules',
-    subtitle: 'Restricted, KYC, COD, pricing',
+    title: 'Check documents and data',
+    subtitle: 'Doc set, data match, restricted',
     kind: 'extract',
     system: 'AI Agent',
     stepKey: 'crosscheck',
@@ -128,7 +128,7 @@ export const initialFlowNodes: Node<FlowNodeData>[] = [
   type: 'workflow',
   position: { x: 900, y: 240 },
   data: {
-    title: 'Ready to fly?',
+    title: 'Complete and compliant?',
     subtitle: 'Decision gate',
     kind: 'condition',
     system: 'AI Agent',
@@ -158,8 +158,8 @@ export const initialFlowNodes: Node<FlowNodeData>[] = [
   type: 'workflow',
   position: { x: 1220, y: 70 },
   data: {
-    title: 'Update order status',
-    subtitle: 'Cleared → courier pickup',
+    title: 'Update compliance status',
+    subtitle: 'SmartKargo, cleared for pickup',
     kind: 'output',
     system: 'SmartKargo',
     params: [
@@ -178,12 +178,29 @@ export const initialFlowNodes: Node<FlowNodeData>[] = [
   }
 },
 {
+  id: 'accepted',
+  type: 'workflow',
+  position: { x: 1520, y: 70 },
+  data: {
+    title: 'Shipment accepted',
+    subtitle: 'Ready for courier pickup',
+    kind: 'output',
+    system: 'SmartKargo',
+    params: [
+    { label: 'Status', value: 'CLEARED_FOR_PICKUP', control: 'text' }],
+
+    notes: 'End of the cleared path. The courier can collect the parcel.',
+    status: 'idle',
+    enabled: true
+  }
+},
+{
   id: 'flag',
   type: 'workflow',
   position: { x: 1220, y: 400 },
   data: {
-    title: 'Draft customer message',
-    subtitle: 'Zalo + app push',
+    title: 'Flag and draft request email',
+    subtitle: 'Email to customer',
     kind: 'action',
     system: 'AI Agent',
     stepKey: 'flag',
@@ -212,17 +229,17 @@ export const initialFlowNodes: Node<FlowNodeData>[] = [
   type: 'workflow',
   position: { x: 1520, y: 400 },
   data: {
-    title: 'CX review',
+    title: 'Operations approves',
     subtitle: 'Human in the loop',
     kind: 'human',
-    system: 'CX team',
+    system: 'Ops team',
     stepKey: 'handoff',
     params: [
     {
       label: 'Queue',
-      value: 'CX approvals',
+      value: 'Ops approvals',
       control: 'select',
-      options: ['CX approvals', 'Ops escalations', 'Fraud review']
+      options: ['Ops approvals', 'Ops escalations', 'Fraud review']
     },
     { label: 'SLA', value: '15', control: 'number', unit: 'min' },
     {
@@ -232,7 +249,7 @@ export const initialFlowNodes: Node<FlowNodeData>[] = [
       hint: 'Leave off to always require a human'
     }],
 
-    notes: 'CX can edit the message before approving.',
+    notes: 'Operations can edit the email before approving.',
     status: 'idle',
     enabled: true
   }
@@ -242,12 +259,12 @@ export const initialFlowNodes: Node<FlowNodeData>[] = [
   type: 'workflow',
   position: { x: 1820, y: 400 },
   data: {
-    title: 'Send to customer',
-    subtitle: 'Zalo ZNS + app push',
+    title: 'Send email to customer',
+    subtitle: 'Email',
     kind: 'output',
     system: 'Messaging',
     params: [
-    { label: 'Channels', value: 'Zalo ZNS, App push', control: 'tags' },
+    { label: 'Channels', value: 'Email', control: 'tags' },
     { label: 'Reminder every', value: '2', control: 'number', unit: 'h' },
     { label: 'Stop on re-upload', value: 'on', control: 'toggle' }],
 
@@ -291,6 +308,7 @@ export const initialFlowEdges: Edge[] = [
   target: 'flag',
   label: 'NO'
 },
+{ ...edgeBase, id: 'e-status-accepted', source: 'status-update', target: 'accepted' },
 { ...edgeBase, id: 'e-flag-approval', source: 'flag', target: 'approval' },
 { ...edgeBase, id: 'e-approval-request', source: 'approval', target: 'request-docs' },
 {
@@ -298,7 +316,8 @@ export const initialFlowEdges: Edge[] = [
   id: 'e-request-trigger',
   source: 'request-docs',
   target: 'trigger',
-  label: 're-upload',
+  targetHandle: 'resubmit',
+  label: 'customer resubmits',
   style: { strokeDasharray: '4 4' }
 }];
 

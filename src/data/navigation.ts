@@ -1,4 +1,4 @@
-import { Bot, LucideIcon, Package, PlugZap, ShieldCheck, UserRound, Workflow } from 'lucide-react';
+import { Inbox, ListChecks, LucideIcon, Package, PlugZap, ScanSearch, Users, Workflow } from 'lucide-react';
 
 export interface NavItem {
   to: string;
@@ -13,47 +13,47 @@ export interface NavGroup {
   items: NavItem[];
 }
 
+/** What a business user needs every day. */
+export const primaryNav: NavItem[] = [
+{ to: '/design', label: 'Check an order', icon: ScanSearch },
+{ to: '/approvals', label: 'To review', icon: Inbox, badge: 'ops' },
+{ to: '/orders', label: 'Orders', icon: Package }];
+
+
+/** Setup that only admins touch. Collapsed at the bottom of the sidebar. */
+export const adminNav: NavItem[] = [
+{ to: '/builder', label: 'Flow Design', icon: Workflow },
+{ to: '/rules', label: 'Rules', icon: ListChecks },
+{ to: '/connections', label: 'SmartKargo', icon: PlugZap },
+{ to: '/account', label: 'Users & mailboxes', icon: Users, end: true }];
+
+
 export const navGroups: NavGroup[] = [
-{
-  lane: 'Control center',
-  items: [{ to: '/design', label: 'Flow Design', icon: Workflow }]
+{ lane: 'Workspace', items: primaryNav },
+{ lane: 'Admin', items: adminNav }];
 
-},
-{
-  lane: 'Operations',
-  items: [
-  { to: '/executions', label: 'Executions', icon: Bot, badge: 'agent' },
-  { to: '/approvals', label: 'Approvals', icon: ShieldCheck, badge: 'ops' }]
 
-},
-{
-  lane: 'Integration',
-  items: [
-  { to: '/connections', label: 'Connection & sync', icon: PlugZap },
-  { to: '/orders', label: 'Orders', icon: Package }]
-
-},
-{
-  lane: 'Workspace',
-  items: [{ to: '/account', label: 'Account', icon: UserRound, end: true }]
-}];
-
+export function isAdminPath(pathname: string): boolean {
+  const root = `/${pathname.split('/').filter(Boolean)[0] ?? ''}`;
+  return adminNav.some((item) => item.to === root);
+}
 
 export interface Crumb {
   label: string;
   to?: string;
 }
 
-/** Breadcrumbs: lane › section › record. */
+/** Breadcrumbs: section › record. Admin pages keep an Admin prefix. */
 export function resolveBreadcrumbs(pathname: string, recordLabel?: string): Crumb[] {
   const segments = pathname.split('/').filter(Boolean);
   const root = `/${segments[0] ?? ''}`;
 
   for (const group of navGroups) {
-    const item = group.items.find((i) => i.to === root || root === '/' && i.to === '/');
+    const item = group.items.find((i) => i.to === root);
     if (!item) continue;
 
-    const crumbs: Crumb[] = [{ label: group.lane }, { label: item.label, to: item.to }];
+    const crumbs: Crumb[] = group.lane === 'Admin' ? [{ label: 'Admin' }] : [];
+    crumbs.push({ label: item.label, to: item.to });
     if (segments.length > 1) crumbs.push({ label: recordLabel ?? segments[1] });
     return crumbs;
   }

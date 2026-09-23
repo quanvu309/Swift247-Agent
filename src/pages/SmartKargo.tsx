@@ -436,7 +436,7 @@ export function SmartKargo() {
                       </TableCell>
                       <TableCell>
                         <Button variant="ghost" size="sm" asChild>
-                          <Link to={`/executions/${order.id}`}>Run log</Link>
+                          <Link to={`/orders/${order.id}`}>Run log</Link>
                         </Button>
                       </TableCell>
                     </TableRow>

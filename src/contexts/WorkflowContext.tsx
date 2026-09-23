@@ -1,8 +1,8 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { DocType, Shipment, TimelineEvent } from '../types/cargo';
-import { createSampleShipment, initialShipments } from '../data/shipments';
+import { createDemoShipment, initialShipments } from '../data/shipments';
 import { decideCargoGate } from '../product/cargoGate.js';
-import { SAMPLE_ORDER_ID, applySamplePack } from '../product/sampleOrder.js';
+import { DEMO_IDS, evaluatePack, extractedRows, type ReadDoc } from '../product/demoScenarios.js';
 import { buildMessageDraft, buildSteps } from '../utils/agent';
 
 interface WorkflowConfig {
@@ -14,8 +14,10 @@ interface WorkflowContextValue extends WorkflowConfig {
   shipments: Shipment[];
   getShipment: (id: string) => Shipment | undefined;
   runCheck: (id: string) => void;
-  attachSamplePack: (fileNames: string[]) => void;
-  resetSampleOrder: () => void;
+  activeDemoId: string;
+  setActiveDemoId: (id: string) => void;
+  applyDemoScan: (id: string, docs: ReadDoc[]) => void;
+  resetDemoOrder: (id: string) => void;
   sendMessage: (id: string, body: string, subject: string, by?: string) => void;
   resubmitDocuments: (id: string, docs: DocType[]) => void;
   acceptCargo: (id: string) => void;
@@ -42,6 +44,7 @@ export function WorkflowProvider({
 
 }: {children: React.ReactNode;autoRunOnSubmit: boolean;requireOpsApproval: boolean;}) {
   const [shipments, setShipments] = useState<Shipment[]>(initialShipments);
+  const [activeDemoId, setActiveDemoId] = useState<string>(DEMO_IDS[0]);
   const timers = useRef<number[]>([]);
   const runTokens = useRef<Record<string, number>>({});
 
@@ -114,7 +117,7 @@ export function WorkflowProvider({
               ...s,
               steps: buildSteps({ ocr: 'done', crosscheck: 'done', decision: 'done', flag: 'done', handoff: 'pending' }),
               message: draft,
-              timeline: [...s.timeline, event('agent', 'Message drafted for CX review')]
+              timeline: [...s.timeline, event('agent', 'Email drafted for Operations review')]
             };
           }
           return {
@@ -174,26 +177,41 @@ export function WorkflowProvider({
     [update]
   );
 
-  const attachSamplePack = useCallback(
-    (fileNames: string[]) => {
-      update(SAMPLE_ORDER_ID, (s) => {
-        const names = Array.isArray(fileNames) ? fileNames : [];
-        const next = applySamplePack(s, names, stamp());
+  const applyDemoScan = useCallback(
+    (id: string, docs: ReadDoc[]) => {
+      update(id, (s) => {
+        const at = stamp();
+        const read = docs.filter((d) => d.type);
+        const uploaded: Shipment['docs'] = read.map((d, index) => ({
+          id: `${id}-up-${index}`,
+          type: d.type as DocType,
+          fileName: d.fileName,
+          pages: 1,
+          uploadedAt: at,
+          status: 'processing'
+        }));
+        const missing = s.docs
+          .filter((d) => !read.some((r) => r.type === d.type))
+          .map((d) => ({ ...d, fileName: '', pages: 0, uploadedAt: '', status: 'missing' as const }));
         return {
-          ...next,
+          ...s,
+          stage: 'submitted',
+          docs: [...uploaded, ...missing],
+          extracted: extractedRows(read),
+          pendingFindings: evaluatePack(s, read),
+          findings: [],
+          message: undefined,
           steps: buildSteps({}),
-          timeline: names.length
-            ? [...s.timeline, event('customer', 'Sample pack uploaded')]
-            : s.timeline
+          timeline: [...s.timeline, event('customer', `${read.length} document(s) uploaded`)]
         };
       });
     },
     [update]
   );
 
-  const resetSampleOrder = useCallback(() => {
-    runTokens.current[SAMPLE_ORDER_ID] = (runTokens.current[SAMPLE_ORDER_ID] ?? 0) + 1;
-    setShipments((prev) => prev.map((s) => (s.id === SAMPLE_ORDER_ID ? createSampleShipment() : s)));
+  const resetDemoOrder = useCallback((id: string) => {
+    runTokens.current[id] = (runTokens.current[id] ?? 0) + 1;
+    setShipments((prev) => prev.map((s) => (s.id === id ? createDemoShipment(id) : s)));
   }, []);
 
   const value = useMemo<WorkflowContextValue>(
@@ -203,18 +221,21 @@ export function WorkflowProvider({
       requireOpsApproval,
       getShipment: (id: string) => shipments.find((s) => s.id === id),
       runCheck,
-      attachSamplePack,
-      resetSampleOrder,
+      activeDemoId,
+      setActiveDemoId,
+      applyDemoScan,
+      resetDemoOrder,
       sendMessage,
       resubmitDocuments,
       acceptCargo
     }),
     [
       acceptCargo,
-      attachSamplePack,
+      activeDemoId,
+      applyDemoScan,
       autoRunOnSubmit,
       requireOpsApproval,
-      resetSampleOrder,
+      resetDemoOrder,
       resubmitDocuments,
       runCheck,
       sendMessage,

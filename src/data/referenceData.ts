@@ -10,6 +10,14 @@ export const referenceRules: ReferenceRule[] = [
   updatedAt: '2026-08-02'
 },
 {
+  id: 'r10',
+  code: 'SR-DOC-02',
+  category: 'Order',
+  title: 'Order number must match across documents',
+  value: 'Documents = SmartKargo order',
+  updatedAt: '2026-09-22'
+},
+{
   id: 'r2',
   code: 'SR-KYC-01',
   category: 'KYC',
